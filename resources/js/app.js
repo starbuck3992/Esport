@@ -3,7 +3,6 @@ window.Vue = require('vue');
 window.Pusher = require('pusher-js');
 window.axios = require('axios');
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-require('bootstrap');
 
 import router from './router';
 import store from './store'

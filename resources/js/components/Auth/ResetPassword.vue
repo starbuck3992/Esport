@@ -10,6 +10,7 @@
                     type="email"
                     id="email"
                     v-model="email"
+                    readonly
                 />
             </div>
             <div>
@@ -18,6 +19,7 @@
                     type="password"
                     id="password"
                     v-model="password"
+                    autocomplete="on"
                 />
             </div>
             <div>
@@ -26,6 +28,7 @@
                     type="password"
                     id="password-confirm"
                     v-model="passwordConfirm"
+                    autocomplete="on"
                 />
             </div>
             <button type="submit">Reset Password</button>
@@ -39,7 +42,7 @@ export default {
     name: "ResetPassword",
     data() {
         return {
-            email: null,
+            email: this.$route.query.email,
             password: null,
             passwordConfirm: null,
             error: null,

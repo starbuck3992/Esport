@@ -7,7 +7,7 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
     <link href="{{ mix('css/app.css') }}" type="text/css" rel="stylesheet"/>
 </head>
-<body style="background-color: white;">
+<body>
 <div id="app">
     <app></app>
 </div>

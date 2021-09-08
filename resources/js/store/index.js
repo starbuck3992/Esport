@@ -7,32 +7,22 @@ const store = createStore(
     {
         plugins: [createPersistedState()],
         state: {
-            user: null,
-            permission: [],
-            loading: false
+            user: null
         },
         getters: {
-            authUser(state) {
+            user(state) {
                 return state.user;
             },
             loggedIn(state) {
                 return !!state.user;
-            },
-            loading(state) {
-                return state.loading;
-            },
+            }
         },
         mutations: {
             createSession(state, user) {
                 state.user = user.name
-                state.permission = user.permissions
             },
             destroySession(state) {
                 state.user = null
-                state.permission = []
-            },
-            setLoading(state, loading) {
-                state.loading = loading
             }
         },
         actions: {
@@ -41,18 +31,14 @@ const store = createStore(
                     .then(response => commit('createSession', response.data))
             },
             login({commit}, payload) {
-                commit('setLoading', true);
                 return API.login(payload)
-                    .then(response =>
-                            commit('createSession', response.data,),
-                        commit('setLoading', false))
+                    .then(response => commit('createSession', response.data))
             },
             logout({commit}) {
                 return API.logout()
                     .then(() => {
                         commit('destroySession');
-                        if (router.currentRoute.name !== 'login')
-                            router.push({name: 'login'})
+                        router.push({name: 'login'})
                     })
             },
         }
