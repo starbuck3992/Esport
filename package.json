@@ -29,6 +29,7 @@
         "@headlessui/vue": "^1.4.1",
         "@heroicons/vue": "^1.0.4",
         "@popperjs/core": "^2.10.1",
+        "@tailwindcss/aspect-ratio": "^0.2.1",
         "tailwindcss": "^2.2.14",
         "vue": "^3.2.8",
         "vuex": "^4.0.2",
