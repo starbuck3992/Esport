@@ -1,5 +1,7 @@
 <template>
   <div class="bg-white">
+    <!-- Login Modal -->
+    <Login ref="login" />
     <!-- Mobile menu -->
     <TransitionRoot as="template" :show="open">
       <Dialog as="div" class="fixed inset-0 flex z-40 lg:hidden" @close="open = false">
@@ -56,7 +58,7 @@
                 <a href="#" class="-m-2 p-2 block font-medium text-gray-900">Create an account</a>
               </div>
               <div class="flow-root">
-                <a href="#" class="-m-2 p-2 block font-medium text-gray-900">Sign in</a>
+                <a href="#" class="-m-2 p-2 block font-medium text-gray-900" @click="openLogin">Sign in</a>
               </div>
             </div>
 
@@ -92,7 +94,7 @@
             </form>
 
             <div class="flex items-center space-x-6">
-              <a href="#" class="text-sm font-medium text-white hover:text-gray-100">Sign in</a>
+              <a href="#" class="text-sm font-medium text-white hover:text-gray-100" @click="openLogin">Sign in</a>
               <a href="#" class="text-sm font-medium text-white hover:text-gray-100">Create an account</a>
             </div>
           </div>
@@ -218,6 +220,7 @@
 </template>
 
 <script>
+import Login from '../Auth/Login'
 import { ref } from 'vue'
 import {
   Dialog,
@@ -371,6 +374,7 @@ export default {
   components: {
     Dialog,
     DialogOverlay,
+    Login,
     Menu,
     MenuButton,
     MenuItem,
@@ -400,5 +404,10 @@ export default {
       open,
     }
   },
+  methods: {
+    openLogin() {
+            this.$refs.Login.showLogin();
+    },
+  }
 }
 </script>
