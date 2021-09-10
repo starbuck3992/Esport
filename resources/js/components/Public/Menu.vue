@@ -2,6 +2,8 @@
   <div class="bg-white">
     <!-- Login Modal -->
     <Login ref="login" />
+    <!-- Register Modal -->
+    <Register ref="register" />
     <!-- Mobile menu -->
     <TransitionRoot as="template" :show="open">
       <Dialog as="div" class="fixed inset-0 flex z-40 lg:hidden" @close="open = false">
@@ -55,10 +57,10 @@
 
             <div class="border-t border-gray-200 py-6 px-4 space-y-6">
               <div class="flow-root">
-                <a href="#" class="-m-2 p-2 block font-medium text-gray-900">Create an account</a>
+                <a href="#" class="-m-2 p-2 block font-medium text-gray-900" @click="openRegister">Vytvořit účet</a>
               </div>
               <div class="flow-root">
-                <a href="#" class="-m-2 p-2 block font-medium text-gray-900" @click="openLogin">Sign in</a>
+                <a href="#" class="-m-2 p-2 block font-medium text-gray-900" @click="openLogin">Přihlásit se</a>
               </div>
             </div>
 
@@ -94,8 +96,8 @@
             </form>
 
             <div class="flex items-center space-x-6">
-              <a href="#" class="text-sm font-medium text-white hover:text-gray-100" @click="openLogin">Sign in</a>
-              <a href="#" class="text-sm font-medium text-white hover:text-gray-100">Create an account</a>
+              <a href="#" class="text-sm font-medium text-white hover:text-gray-100" @click="openLogin">Přihlásit se</a>
+              <a href="#" class="text-sm font-medium text-white hover:text-gray-100" @click="openRegister">Vytvořit účet</a>
             </div>
           </div>
         </div>
@@ -221,6 +223,7 @@
 
 <script>
 import Login from '../Auth/Login'
+import Register from '../Auth/Register'
 import { ref } from 'vue'
 import {
   Dialog,
@@ -383,6 +386,7 @@ export default {
     PopoverButton,
     PopoverGroup,
     PopoverPanel,
+    Register,
     Tab,
     TabGroup,
     TabList,
@@ -406,7 +410,10 @@ export default {
   },
   methods: {
     openLogin() {
-            this.$refs.Login.showLogin();
+            this.$refs.login.open = true;
+    },
+    openRegister() {
+            this.$refs.register.open = true;
     },
   }
 }

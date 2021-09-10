@@ -66,8 +66,6 @@
      
 
       <section aria-labelledby="perks-heading" class="bg-gray-50 border-t border-gray-200">
-        <h2 id="perks-heading" class="sr-only">Our perks</h2>
-
         <div class="max-w-7xl mx-auto py-24 px-4 sm:px-6 sm:py-32 lg:px-8">
           <div class="grid grid-cols-1 gap-y-12 sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-4 lg:gap-x-8 lg:gap-y-0">
             <div v-for="perk in perks" :key="perk.name" class="text-center md:flex md:items-start md:text-left lg:block lg:text-center">
