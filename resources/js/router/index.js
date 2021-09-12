@@ -10,6 +10,7 @@ import ForgotPassword from '../components/Auth/ForgotPassword'
 //Public
 import LandingPage from "../components/Public/LandingPage"
 import HomeIndex from "../components/Public/Home/Index"
+import UserProfile from "../components/Public/Profile/Index"
 
 //404
 let NotFound = {template: '<div>404</div>'};
@@ -53,6 +54,14 @@ const routes = [
                 path: "forgot-password",
                 name: "forgotPassword",
                 component: ForgotPassword,
+                meta: {
+                    guest: true
+                },
+            },
+            {
+                path: "profile",
+                name: "UserProfile",
+                component: UserProfile,
                 meta: {
                     guest: true
                 },
