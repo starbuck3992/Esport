@@ -7,10 +7,13 @@ import Register from '../components/Auth/Register'
 import ResetPassword from '../components/Auth/ResetPassword'
 import ForgotPassword from '../components/Auth/ForgotPassword'
 
+
 //Public
 import LandingPage from "../components/Public/LandingPage"
 import HomeIndex from "../components/Public/Home/Index"
-import UserProfile from "../components/Public/Profile/Index"
+import ProfileIndex from "../components/Public/Profile/Index"
+import ProfileInformation from "../components/Public/Profile/Profile"
+import ProfilePassword from "../components/Public/Profile/Password"
 
 //404
 let NotFound = {template: '<div>404</div>'};
@@ -60,11 +63,23 @@ const routes = [
             },
             {
                 path: "profile",
-                name: "UserProfile",
-                component: UserProfile,
+                name: "ProfileIndex",
+                component: ProfileIndex,
                 meta: {
                     guest: true
                 },
+                children:[
+                    {
+                        path: "",
+                        name: "profileInformation",
+                        component: ProfileInformation,
+                    },
+                    {
+                        path: "password",
+                        name: "profilePassword",
+                        component: ProfilePassword,
+                    },
+                ]
             },
         ]
     },

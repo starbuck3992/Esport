@@ -30,17 +30,21 @@
           <div class="divide-y divide-gray-200 lg:grid lg:grid-cols-12 lg:divide-y-0 lg:divide-x">
             <aside class="py-6 lg:col-span-3">
               <nav class="space-y-1">
-                <a v-for="item in subNavigation" :key="item.name" :href="item.href" :class="[item.current ? 'bg-teal-50 border-teal-500 text-teal-700 hover:bg-teal-50 hover:text-teal-700' : 'border-transparent text-gray-900 hover:bg-gray-50 hover:text-gray-900', 'group border-l-4 px-3 py-2 flex items-center text-sm font-medium']" :aria-current="item.current ? 'page' : undefined" @click="showMenu(item)">
-                  <component :is="item.icon" :class="[item.current ? 'text-teal-500 group-hover:text-teal-500' : 'text-gray-400 group-hover:text-gray-500', 'flex-shrink-0 -ml-1 mr-3 h-6 w-6']" aria-hidden="true" />
+                <router-link :to="{ name: 'profileInformation' }" @click="activate(1)" :class="[active_el == 1 ? 'bg-teal-50 border-teal-500 text-teal-700 hover:bg-teal-50 hover:text-teal-700' : 'border-transparent text-gray-900 hover:bg-gray-50 hover:text-gray-900', 'group border-l-4 px-3 py-2 flex items-center text-sm font-medium']">
+                  <component :is="UserCircleIcon" :class="[active_el == 1 ? 'text-teal-500 group-hover:text-teal-500' : 'text-gray-400 group-hover:text-gray-500', 'flex-shrink-0 -ml-1 mr-3 h-6 w-6']" />
                   <span class="truncate">
-                    {{ item.name }}
+                    Profil
                   </span>
-                </a>
+                </router-link>
+                <router-link :to="{ name: 'profilePassword' }" @click="activate(2)" :class="[active_el == 2 ? 'bg-teal-50 border-teal-500 text-teal-700 hover:bg-teal-50 hover:text-teal-700' : 'border-transparent text-gray-900 hover:bg-gray-50 hover:text-gray-900', 'group border-l-4 px-3 py-2 flex items-center text-sm font-medium']">
+                  <component :is="KeyIcon" :class="[active_el == 2 ? 'text-teal-500 group-hover:text-teal-500' : 'text-gray-400 group-hover:text-gray-500', 'flex-shrink-0 -ml-1 mr-3 h-6 w-6']" />
+                  <span class="truncate">
+                    Heslo
+                  </span>
+                </router-link>
               </nav>
             </aside>
-             
-            <Profile as="profile" v-show="subNavigation.find( ({ name }) => name === 'Profil' ).current"></Profile>
-            <Password as="password" v-show="subNavigation.find( ({ name }) => name === 'Heslo' ).current"></Password>
+             <router-view></router-view>
           </div>
         </div>
       </div>
@@ -49,8 +53,6 @@
 </template>
 
 <script>
-import Profile from '../Profile/Profile'
-import Password from '../Profile/Password'
 import { ref } from 'vue'
 import {
   Disclosure,
@@ -73,16 +75,16 @@ import {
   XIcon,
 } from '@heroicons/vue/outline'
 
-
+/*
 const subNavigation = [
-  { name: 'Profil', href: '#', icon: UserCircleIcon, current: true, },
-  { name: 'Účet', href: '#', icon: CogIcon, current: false },
-  { name: 'Heslo', href: '#', icon: KeyIcon, current: false },
-  { name: 'Upozornění', href: '#', icon: BellIcon, current: false },
-  //{ name: 'Billing', href: '#', icon: CreditCardIcon, current: false },
-  //{ name: 'Integrations', href: '#', icon: ViewGridAddIcon, current: false },
-]
-
+        { name: 'Profil', href: profile, icon: UserCircleIcon, current: true, },
+        { name: 'Účet', href: '#', icon: CogIcon, current: false },
+        { name: 'Heslo', href: password, icon: KeyIcon, current: false },
+        { name: 'Upozornění', href: '#', icon: BellIcon, current: false },
+        //{ name: 'Billing', href: '#', icon: CreditCardIcon, current: false },
+        //{ name: 'Integrations', href: '#', icon: ViewGridAddIcon, current: false },
+      ]
+*/
 export default {
   components: {
     Disclosure,
@@ -92,27 +94,22 @@ export default {
     MenuButton,
     MenuItem,
     MenuItems,
-    Password,
-    Profile,
     BellIcon,
     MenuIcon,
     SearchIcon,
     XIcon,
   },
   setup() {
-
+    const active_el = 1;
     return {
-      subNavigation,
+      UserCircleIcon,
+      KeyIcon,
+      active_el,
     }
   },
   methods:{
-    showMenu(item){
-      console.log(subNavigation.every.current)
-      subNavigation.forEach(function(element) {
-        element.current = false;
-      })
-      subNavigation.find( ({ name }) => name === item.name ).current= true;
-      
+    activate:function(el){
+        this.active_el = el;
     }
   }
 }

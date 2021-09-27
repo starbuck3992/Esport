@@ -4,9 +4,11 @@
     <Login ref="login" />
     <!-- Register Modal -->
     <Register ref="register" />
+    <!-- Chat User -->
+    <ChatUsers ref="chatUsers" />
     <!-- Mobile menu -->
     <TransitionRoot as="template" :show="open">
-      <Dialog as="div" class="fixed inset-0 flex z-40 lg:hidden" @close="open = false">
+      <Dialog as="div" class="fixed inset-0 flex z-10 lg:hidden" @close="open = false">
         <TransitionChild as="template" enter="transition-opacity ease-linear duration-300" enter-from="opacity-0" enter-to="opacity-100" leave="transition-opacity ease-linear duration-300" leave-from="opacity-100" leave-to="opacity-0">
           <DialogOverlay class="fixed inset-0 bg-black bg-opacity-25" />
         </TransitionChild>
@@ -122,7 +124,7 @@
                       <div class="relative flex">
                         <PopoverButton :class="[open ? 'text-indigo-600' : 'text-gray-700 hover:text-gray-800', 'relative flex items-center justify-center transition-colors ease-out duration-200 text-sm font-medium']">
                           {{ category.name }}
-                          <span :class="[open ? 'bg-indigo-600' : '', 'absolute z-20 -bottom-px inset-x-0 h-0.5 transition ease-out duration-200']" aria-hidden="true" />
+                          <span :class="[open ? 'bg-indigo-600' : '', 'absolute z-10 -bottom-px inset-x-0 h-0.5 transition ease-out duration-200']" aria-hidden="true" />
                         </PopoverButton>
                       </div>
 
@@ -182,7 +184,7 @@
 
               <div class="flex-1 flex items-center justify-end">
                 <!-- Profile dropdown -->
-                  <Menu as="div" class="ml-3 relative z-20">
+                  <Menu as="div" class="ml-3 relative z-10">
                     <div>
                       <MenuButton class="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                         <span class="sr-only">Open user menu</span>
@@ -190,7 +192,7 @@
                       </MenuButton>
                     </div>
                     <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
-                    <MenuItems class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-20">
+                    <MenuItems class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
                       <MenuItem v-slot="{ active }">
                         <a href="#" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']">Your Profile</a>
                       </MenuItem>
@@ -224,6 +226,7 @@
 <script>
 import Login from '../Auth/Login'
 import Register from '../Auth/Register'
+import ChatUsers from '../Public/Chat/ChatUsers.vue'
 import { ref } from 'vue'
 import {
   Dialog,
@@ -375,6 +378,7 @@ const navigation = {
 
 export default {
   components: {
+    ChatUsers,
     Dialog,
     DialogOverlay,
     Login,
