@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -12,18 +12,6 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-//Route::get('/', function () {
-//    return view('welcome');
-//});
-//
-//Auth::routes();
-//
-//Route::get('/', 'App\Http\Controllers\ChatsController@index');
-//Route::get('messages', 'App\Http\Controllers\ChatsController@fetchMessages');
-//Route::post('messages', 'App\Http\Controllers\ChatsController@sendMessage');
-//
-//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::get('/{any}', function () {
     return view('app');

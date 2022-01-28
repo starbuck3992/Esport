@@ -1,12 +1,10 @@
-import { createWebHistory, createRouter } from "vue-router";
-import store from '../store/index';
+import { createWebHistory, createRouter } from "vue-router"
+import store from '../store/index'
 
 //Auth
-import Login from "../components/Auth/Login"
-import Register from '../components/Auth/Register'
 import ResetPassword from '../components/Auth/ResetPassword'
 import ForgotPassword from '../components/Auth/ForgotPassword'
-
+import SocialLogin from "../components/Auth/SocialLogin"
 
 //Public
 import LandingPage from "../components/Public/LandingPage"
@@ -16,7 +14,7 @@ import ProfileInformation from "../components/Public/Profile/Profile"
 import ProfilePassword from "../components/Public/Profile/Password"
 
 //404
-let NotFound = {template: '<div>404</div>'};
+let NotFound = {template: '<div>404</div>'}
 
 //Routes
 const routes = [
@@ -26,57 +24,43 @@ const routes = [
         children: [
             {
                 path: '',
-                name: 'home',
+                name: 'homeIndex',
                 component: HomeIndex,
             },
             {
-                path: 'login',
-                name: 'login',
-                component: Login,
-                meta: {
-                    guest: true
-                },
+                path: 'authorize/:provider/callback',
+                name: 'socialLogin',
+                component: SocialLogin,
             },
             {
-                path: 'register',
-                name: 'register',
-                component: Register,
-                meta: {
-                    guest: true
-                },
-            },
-            {
-                path: "reset-password",
-                name: "resetPassword",
+                path: 'reset-password',
+                name: 'resetPassword',
                 component: ResetPassword,
                 meta: {
                     guest: true
                 },
             },
             {
-                path: "forgot-password",
-                name: "forgotPassword",
+                path: 'forgot-password',
+                name: 'forgotPassword',
                 component: ForgotPassword,
                 meta: {
                     guest: true
                 },
             },
             {
-                path: "profile",
-                name: "ProfileIndex",
+                path: 'profile',
+                name: 'profileIndex',
                 component: ProfileIndex,
-                meta: {
-                    guest: true
-                },
-                children:[
+                children: [
                     {
-                        path: "",
-                        name: "profileInformation",
+                        path: '',
+                        name: 'profileInformation',
                         component: ProfileInformation,
                     },
                     {
-                        path: "password",
-                        name: "profilePassword",
+                        path: 'password',
+                        name: 'profilePassword',
                         component: ProfilePassword,
                     },
                 ]
@@ -96,29 +80,18 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-    const abilities = store.getters['permission']
-    const loggedIn = store.getters['loggedIn']
 
-    const canNavigate = to.matched.some(() => {
-        if (!loggedIn && to.meta.verified) {
-            return false
-        }
-        else if (loggedIn && to.meta.guest) {
-            return false
-        }
-        else if (to.meta.action) {
-            return abilities.can(to.meta.action)
-        }
-        else {
-            return true
-        }
-    })
+    const loggedIn = store.getters['userModule/loggedIn']
 
-    if (!canNavigate) {
-        return next('/')
+    if (to.matched.some(record => record.meta.guest)) {
+        if (loggedIn) {
+            next('/')
+        } else {
+            next()
+        }
     } else {
         next()
     }
 })
 
-export default router;
+export default router

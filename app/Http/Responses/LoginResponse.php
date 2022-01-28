@@ -2,7 +2,7 @@
 
 namespace App\Http\Responses;
 
-use App\Http\Resources\UserResource;
+use App\Http\Resources\LoginResource;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Fortify\Contracts\LoginResponse as LoginResponseContract;
 
@@ -16,7 +16,7 @@ class LoginResponse implements LoginResponseContract
     public function toResponse($request)
     {
 
-        return new UserResource(Auth::user());
+        return new LoginResource(Auth::user());
 
     }
 }

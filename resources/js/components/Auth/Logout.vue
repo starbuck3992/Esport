@@ -1,14 +1,27 @@
 <template>
-    <div @click="logout">Odhlášení</div>
+    <a href="#" :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']" @click="logout">Odhlášení</a>
 </template>
 
 <script>
+import {useStore} from 'vuex'
+import {toRefs} from 'vue'
 export default {
-    name: 'Logout',
-    methods: {
-        logout() {
-            this.$store.dispatch('logout');
-        },
+    props: {
+        active: {
+            type: Boolean
+        }
     },
+    setup(props) {
+        let {active} = toRefs(props)
+        const store = useStore()
+        async function logout(){
+            await store.dispatch('userModule/logout')
+        }
+        return {
+            active,
+            logout
+        }
+    }
 };
 </script>
+

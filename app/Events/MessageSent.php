@@ -2,6 +2,8 @@
 
 namespace App\Events;
 
+use App\Http\Resources\Chat\MessageResource;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Models\Message;
 use Illuminate\Broadcasting\Channel;
@@ -35,9 +37,8 @@ class MessageSent implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct(User $user, Message $message)
+    public function __construct(Message $message)
     {
-        $this->user = $user;
         $this->message = $message;
     }
 
@@ -48,6 +49,10 @@ class MessageSent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('chat');
+        return new PrivateChannel('chat.'. $this->message->room_id);
+    }
+
+    public function broadcastWith(){
+        return (new MessageResource(($this->message)))->resolve();
     }
 }

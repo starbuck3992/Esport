@@ -1,62 +1,75 @@
-window._ = require('lodash');
-window.Vue = require('vue');
-window.Pusher = require('pusher-js');
-window.axios = require('axios');
-window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-
-import router from './router';
+import {onMounted, computed} from "vue";
+import router from './router'
 import store from './store'
-import Echo from 'laravel-echo';
+import api from "./services/api"
+import Echo from 'laravel-echo'
+import * as PusherPushNotifications from '@pusher/push-notifications-web'
 
+import Loading from './components/Loading'
+import Exception from './components/Exception'
+import {useStore} from "vuex";
+
+window._ = require('lodash')
+window.Vue = require('vue')
+window.Pusher = require('pusher-js')
+window.axios = require('axios')
+window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
 window.Echo = new Echo({
     broadcaster: 'pusher',
     key: process.env.MIX_PUSHER_APP_KEY,
     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
-    forceTLS: true
-});
+    forceTLS: true,
+    authorizer: (channel) => {
+        return {
+            authorize: (socketId, callback) => {
+                axios.post('/api/broadcasting/auth', {
+                    socket_id: socketId,
+                    channel_name: channel.name
+                })
+                    .then(response => {
+                        callback(false, response.data)
+                    })
+                    .catch(error => {
+                        callback(true, error)
+                    })
+            }
+        }
+    },
+})
+
+// const beamsClient = new PusherPushNotifications.Client({
+//     instanceId: process.env.MIX_PUSHER_BEAMS_INSTANCE_ID,
+// });
+//
+// beamsClient.start()
+//     .then(() => beamsClient.addDeviceInterest('hello'))
+//     .then(() => console.log('Successfully registered and subscribed!'))
+//     .catch(console.error)
 
 const app = Vue.createApp({
     el: '#app',
     components: {
-        'App': { template: '<router-view></router-view>' },
+        'App': {
+            template:
+                '<loading></loading>' +
+                '<router-view></router-view>' +
+                '<exception></exception>'
+        },
+    },
+    setup() {
+        const store = useStore();
+        const loggedIn = computed(() => store.getters['userModule/loggedIn']);
+
+        onMounted(async () => {
+            if (loggedIn.value) {
+                await store.dispatch('notificationsModule/getNotifications');
+            }
+        })
     }
 })
+
+app.component('loading', Loading);
+app.component('exception', Exception);
 app.use(router);
 app.use(store);
 app.mount('#app');
-
-//
-// const app = new Vue({
-//     el: '#app',
-//
-//     data: {
-//         messages: []
-//     },
-//
-//     created() {
-//         this.fetchMessages();
-//         Echo.private('chat')
-//             .listen('MessageSent', (e) => {
-//                 this.messages.push({
-//                     message: e.message.message,
-//                     user: e.user
-//                 });
-//             });
-//     },
-//
-//     methods: {
-//         fetchMessages() {
-//             axios.get('/messages').then(response => {
-//                 this.messages = response.data;
-//             });
-//         },
-//
-//         addMessage(message) {
-//             this.messages.push(message);
-//
-//             axios.post('/messages', message).then(response => {
-//                 console.log(response.data);
-//             });
-//         }
-//     }
-// });
