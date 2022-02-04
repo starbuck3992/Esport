@@ -50,11 +50,11 @@
 </template>
 
 <script>
-import {computed} from 'vue'
-import {useStore} from 'vuex'
+import {computed} from "vue"
+import {useStore} from "vuex"
 
-import {Dialog, DialogOverlay, DialogTitle, TransitionChild, TransitionRoot} from '@headlessui/vue'
-import {ExclamationIcon, XIcon} from '@heroicons/vue/outline'
+import {Dialog, DialogOverlay, DialogTitle, TransitionChild, TransitionRoot} from '@headlessui/vue';
+import {ExclamationIcon, XIcon} from '@heroicons/vue/outline';
 
 export default {
     components: {
@@ -67,13 +67,13 @@ export default {
         XIcon,
     },
     setup() {
-        const store = useStore()
+        const store = useStore();
 
-        const showException = computed(() => store.getters['exceptionModule/show'])
-        const exception = computed(() => store.getters['exceptionModule/exception'])
+        const showException = computed(() => store.getters['exceptionModule/show']);
+        const exception = computed(() => store.getters['exceptionModule/exception']);
 
         function closeException(){
-            store.dispatch('exceptionModule/closeException')
+            store.commit('exceptionModule/clearException');
         }
 
         return {
@@ -82,5 +82,5 @@ export default {
             closeException
         }
     }
-}
+};
 </script>

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Events\MessageSent as MessageSentEvent;
-use App\Http\Requests\ChatSetOnlineRequest;
 use App\Notifications\MessageSent as MessageSentNotification;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Chat\RoomResource;
@@ -26,17 +25,17 @@ class ChatController extends Controller
         return MessageResource::collection(Message::where('room_id', $roomId)->orderBy('created_at', 'DESC')->take(5)->get());
     }
 
-    public function setOnline(ChatSetOnlineRequest $request)
+    public function setOnline(Request $request)
     {
         try {
 
             $user = User::find(Auth::id());
 
-            $user->rooms()->where('online',true)->updateExistingPivot($request->roomId, [
+            $user->rooms()->where('online',true)->updateExistingPivot($request->id, [
                 'online' => false,
             ]);
 
-            $user->rooms()->updateExistingPivot($request->roomId, [
+            $user->rooms()->updateExistingPivot($request->id, [
                 'online' => true,
             ]);
 

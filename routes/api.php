@@ -30,12 +30,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/chat/rooms', [ChatController::class, 'rooms']);
     Route::get('/chat/rooms/{id}/messages', [ChatController::class, 'messages']);
     Route::post('/chat/rooms/{id}/messages', [ChatController::class, 'sendMessage']);
-    Route::post('/chat/rooms', [ChatController::class, 'setOnline']);
+    Route::post('/chat/rooms/{id}/setOnline', [ChatController::class, 'setOnline']);
+    Route::get('/notifications', [NotificationController::class, 'notifications']);
+    Route::put('/notifications', [NotificationController::class, 'markAsRead']);
 });
-
-Route::get('/notifications', [NotificationController::class, 'notifications']);
-Route::put('/notifications', [NotificationController::class, 'markAsRead']);
-
 
 Route::get('/user/{id}', [UserController::class, 'show']);
 Route::post('/users', [UserController::class, 'search']);

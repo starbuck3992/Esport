@@ -12,7 +12,7 @@ export default {
         }
     },
     setup(props) {
-        let {active} = toRefs(props)
+        const {active} = toRefs(props)
         const store = useStore()
         async function logout(){
             await store.dispatch('userModule/logout')

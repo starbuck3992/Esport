@@ -1,5 +1,5 @@
-import api from '../../services/api'
-import router from '../../router'
+import router from "../../router";
+import Api from "../../services/api";
 
 const user = {
     namespaced: true,
@@ -12,37 +12,47 @@ const user = {
     },
     getters: {
         user(state) {
-            return state.user
+            return state.user;
         },
         loggedIn(state) {
-            return !!state.user.id
+            return !!state.user.id;
         }
     },
     mutations: {
         createSession(state, user) {
-            Object.assign(state.user, user)
+            state.user.id = user.id;
+            state.user.nick = user.nick;
+            state.user.avatar = user.avatar;
         },
         destroySession(state) {
-            Object.keys(state.user).forEach(k => state.user[k] = null)
+            Object.keys(state.user).forEach(k => state.user[k] = null);
         }
     },
     actions: {
-        login({commit, dispatch}, payload) {
-            return api.login(payload)
-                .then(response =>
-                    commit('createSession', response.data)
-                )
+        async register({dispatch}, payload) {
+            await Api.get('/sanctum/csrf-cookie');
+            return Api.post('/register', payload);
         },
-        logout({commit}) {
-            return api.logout()
-                .then(() => {
-                    commit('destroySession')
-                })
-                .finally(() => {
-                    router.push({name: 'homeIndex'})
-                })
+        async login({commit, dispatch}, payload) {
+            await Api.get('/sanctum/csrf-cookie');
+            return Api.post('/login', payload);
+        },
+        logout({commit, dispatch}) {
+            Api.post('/logout').then(() => {
+                commit('destroySession')
+                dispatch('chatModule/clearRooms', null, {root: true})
+            }).catch((error) => {
+                    if (error.response) {
+                        dispatch('exceptionModule/showException', error.response.data.message, {root: true});
+                    } else {
+                        console.log(error);
+                    }
+                }
+            ).finally(
+                router.push({name: 'homeIndex'})
+            )
         }
     }
-}
+};
 
-export default user
+export default user;

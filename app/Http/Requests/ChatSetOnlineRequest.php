@@ -24,7 +24,7 @@ class ChatSetOnlineRequest extends FormRequest
     public function rules()
     {
         return [
-            'roomId' => 'required|numeric'
+            'id' => 'required|numeric'
         ];
     }
 

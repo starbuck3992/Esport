@@ -1,5 +1,4 @@
-import api from "../../services/api";
-import store from "../index";
+import Api from "../../services/api";
 
 const notificationModule = {
     namespaced: true,
@@ -29,30 +28,30 @@ const notificationModule = {
         },
     },
     actions: {
-        async getNotifications({commit, dispatch, rootGetters}) {
-
-            try {
-
-                const notifications = await api.getNotifications();
-                commit('setNotifications', notifications.data);
-
-                await Echo.private('user.' + rootGetters['userModule/user'].id)
+        getNotifications({commit, dispatch, rootGetters}) {
+            Api.get('/api/notifications').then((response) => {
+                commit('setNotifications', response.data);
+                Echo.private('user.' + rootGetters['userModule/user'].id)
                     .notification((notification) => {
                         commit('setNotification', notification)
                     })
-            } catch (error) {
-
-                dispatch('exceptionModule/showException', error.response.data.message, {root: true});
-
-            }
+            }).catch((error) => {
+                if (error.response) {
+                    dispatch('exceptionModule/showException', error.response.data.message, {root: true});
+                } else {
+                    console.log(error);
+                }
+            })
         },
         readSingleNotification({commit, state}, index) {
-            return api.markAsRead(state.notifications[index].id)
-                .then(() => commit('deleteSingleNotification', index))
+            Api.put('/api/notifications', null, {id: state.notifications[index].id}).then(() =>
+                commit('deleteSingleNotification', index)
+            )
         },
         readAllNotifications({commit}) {
-            return api.markAsRead()
-                .then(() => commit('deleteAllNotifications'))
+            Api.put('/api/notifications', null, null).then(() =>
+                commit('deleteAllNotifications')
+            )
         }
     }
 }

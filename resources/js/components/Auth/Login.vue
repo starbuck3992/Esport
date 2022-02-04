@@ -21,7 +21,7 @@
                             <button type="button"
                                     class="bg-white rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                     @click="close">
-                                <span class="sr-only">Close</span>
+                                <span class="sr-only">Zavřít</span>
                                 <XIcon class="h-6 w-6" aria-hidden="true"/>
                             </button>
                         </div>
@@ -76,7 +76,8 @@
 
                                         <div class="flex items-center justify-between">
                                             <div class="flex items-center">
-                                                <input id="remember-me" name="remember-me" type="checkbox"
+                                                <input v-model="form.rememberMe" id="remember-me" name="remember-me"
+                                                       type="checkbox"
                                                        class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"/>
                                                 <label for="remember-me" class="ml-2 block text-sm text-gray-900">
                                                     Zapamatovat si mě!
@@ -115,13 +116,12 @@
 </template>
 
 <script>
-import {toRefs, reactive, onMounted} from 'vue'
-import {useStore} from 'vuex'
-import {Dialog, DialogOverlay, DialogTitle, TransitionChild, TransitionRoot} from '@headlessui/vue'
-import {ExclamationIcon, XIcon} from '@heroicons/vue/outline'
-import api from "../../services/api"
-import Form from "../../utilities/form"
-import SocialAuth from "./SocialAuth"
+import {toRefs, reactive} from "vue"
+import {useStore} from "vuex"
+import {Dialog, DialogOverlay, DialogTitle, TransitionChild, TransitionRoot} from "@headlessui/vue";
+import {ExclamationIcon, XIcon} from "@heroicons/vue/outline";
+import Form from "../../utilities/form";
+import SocialAuth from "./SocialAuth";
 
 export default {
     props: {
@@ -141,27 +141,33 @@ export default {
         SocialAuth
     },
     setup(props, {emit}) {
-
-        onMounted(async () => {
-            console.log('login')
-        })
-
         const {open} = toRefs(props)
         const form =
             reactive(new Form({
-                email: "",
-                password: "",
+                email: '',
+                password: '',
+                rememberMe: false
             }))
         const store = useStore()
 
-        async function login() {
-            await store.dispatch('userModule/login', form.data())
-                .then(() => {
-                    close()
-                }).catch(error => {
-                    console.log(error)
-                    //form.onFail(error.response.data.errors)
-                })
+        function login() {
+            store.dispatch('userModule/login', form.data()).then((response) => {
+                store.commit('userModule/createSession', response.data);
+                store.dispatch('notificationsModule/getNotifications');
+                store.dispatch('chatModule/getRooms');
+                close();
+            }).catch((error) => {
+                if (error.response) {
+                    if (error.response.status === 422) {
+                        form.onFail(error.response.data.errors);
+                    } else {
+                        close();
+                        store.dispatch('exceptionModule/showException', error.response.data.message);
+                    }
+                } else {
+                    console.log(error);
+                }
+            })
         }
 
         function close() {

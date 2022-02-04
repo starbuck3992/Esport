@@ -5,19 +5,14 @@ const loadingModule = {
     },
     getters: {
         loading(state) {
-            return state.loading
+            return state.loading;
         }
     },
     mutations: {
         setLoading(state, newLoadingStatus) {
-            state.loading = newLoadingStatus
-        }
-    },
-    actions: {
-        loading({commit}, payload) {
-            commit('setLoading', payload)
+            state.loading = newLoadingStatus;
         }
     }
 }
 
-export default loadingModule
+export default loadingModule;

@@ -1,4 +1,4 @@
-import api from "../../services/api";
+import Api from "../../services/api";
 
 const chatModule = {
     namespaced: true,
@@ -17,27 +17,27 @@ const chatModule = {
     },
     getters: {
         open(state) {
-            return state.open
+            return state.open;
         },
         room(state) {
-            return state.room
+            return state.room;
         },
         rooms(state) {
-            return state.rooms
+            return state.rooms;
         },
         roomExist(state) {
-            return !!state.room.id
+            return !!state.room.id;
         }
     },
     mutations: {
         setOpen(state, newState) {
-            state.open = newState
+            state.open = newState;
         },
         setRoom(state, room) {
-            Object.assign(state.room, room)
+            Object.assign(state.room, room);
         },
         setRooms(state, rooms) {
-            state.rooms.push(...rooms)
+            state.rooms.push(...rooms);
         },
         filterRoom(state, roomId) {
             Object.assign(state.room, state.rooms.filter(function (room) {
@@ -45,116 +45,141 @@ const chatModule = {
             })[0])
         },
         setMessages(state, messages) {
-            state.room.messages = messages
+            state.room.messages = messages;
         },
         addMessage(state, message) {
-            state.room.messages.push(message)
+            state.room.messages.push(message);
         },
         setTyping(state, user) {
-            state.room.typing.user = user
+            state.room.typing.user = user;
+        },
+        clearRooms(state) {
+            state.rooms = [];
+            state.room.id = null;
+            state.room.name = null;
+            state.room.image = null;
+            state.room.typing.user = null;
+            state.room.messages = [];
         }
     },
     actions: {
-        async getRooms({commit, state, dispatch}) {
-
-            try {
-
-                const rooms = await api.getRooms();
-
-                if (rooms.data.length) {
-                    commit('setRooms', rooms.data);
-                    commit('setRoom', rooms.data[0]);
-                    await dispatch('connectToChannel', state.room.id);
+        clearRooms({commit}) {
+            commit('clearRooms');
+        },
+        getRooms({commit, dispatch}) {
+            Api.get('/api/chat/rooms').then((response) => {
+                if (response.data.length) {
+                    commit('setRooms', response.data);
+                    commit('setRoom', response.data[0]);
                 }
-
-            } catch (error) {
-                dispatch('exceptionModule/showException', error.response.data.message, {root: true});
-            }
-
+            }).catch((error) => {
+                if (error.response) {
+                    dispatch('exceptionModule/showException', error.response.data.message, {root: true});
+                } else {
+                    console.log(error);
+                }
+            })
         },
 
-        async getMessages({commit, state, dispatch}, roomId) {
-            return await api.getMessages(roomId).then((response) => commit('setMessages', response.data))
+        getMessages({commit, state, dispatch}, roomId) {
+            Api.get(`/api/chat/rooms/${roomId}/messages`).then((response) => commit('setMessages', response.data)).catch((error) => {
+                if (error.response) {
+                    dispatch('exceptionModule/showException', error.response.data.message, {root: true});
+                } else {
+                    console.log(error);
+                }
+            })
         },
 
-        async connectToChannel({commit, state, dispatch}, roomId) {
+        connectToChannel({commit, state, dispatch}, roomId) {
 
-            let timer
-            let payload = {
-                roomId: roomId
-            }
+            let timer;
 
-            try {
+            dispatch('getMessages', roomId).then(() => {
+                Api.post(`/api/chat/rooms/${roomId}/setOnline`, null).then(
+                    Echo.private('chat.' + roomId)
+                        .listen('MessageSent', (e) => {
+                            commit('addMessage', e);
+                        })
+                        .listenForWhisper('Typing', (e) => {
+                            commit('setTyping', e.user);
 
-                await api.setOnline(payload);
+                            clearTimeout(timer);
 
-                await Echo.private('chat.' + roomId)
-                    .listen('MessageSent', (e) => {
-                        commit('addMessage', e)
-                    })
-                    .listenForWhisper('Typing', (e) => {
-                        commit('setTyping', e.user)
-
-                        clearTimeout(timer)
-
-                        timer = setTimeout(() => {
-                            commit('setTyping', null)
-                        }, 1000)
-                    })
-            } catch (error) {
+                            timer = setTimeout(() => {
+                                commit('setTyping', null);
+                            }, 1000)
+                        })
+                )
+            }).catch(error => {
                 dispatch('closeChat', state.room.id)
-                dispatch('exceptionModule/showException', error.response.data.message, {root: true})
-            }
+                if (error.response) {
+                    dispatch('exceptionModule/showException', error.response.data.message, {root: true});
+                } else {
+                    console.log(error);
+                }
+            })
         },
 
         async disconnectChannel({commit, state}, roomId) {
-            await Echo.leave('chats.' + roomId)
+            await Echo.leave('chats.' + roomId);
         },
 
-        async openChat({commit, state, dispatch, getters}, roomId) {
-            try {
+        openChat({commit, state, dispatch, getters}, roomId) {
+            commit('setOpen', true);
 
-                commit('setOpen', true)
-                if (!getters.roomExist) {
-                    dispatch('getRooms')
-                } else {
+            let id = roomId ? roomId : state.room.id;
 
-                    let id = roomId ? roomId : state.room.id;
-
-                    if (id !== state.room.id) {
-                        commit('filterRoom', id)
-                    }
-                    console.log(1)
-                    await dispatch('getMessages', id)
-                    console.log(2)
-                    await dispatch('connectToChannel', id)
-                }
-            } catch (error) {
-                dispatch('closeChat', state.room.id)
-                dispatch('exceptionModule/showException', error.response.data.message, {root: true})
+            if (id !== state.room.id) {
+                commit('filterRoom', id);
             }
+            dispatch('connectToChannel', id).catch(error => {
+                dispatch('closeChat', state.room.id)
+                if (error.response) {
+                    dispatch('exceptionModule/showException', error.response.data.message, {root: true});
+                } else {
+                    console.log(error);
+                }
+            })
         },
 
         async closeChat({commit, dispatch}, roomId) {
-            commit('setOpen', false)
-            await dispatch('disconnectChannel', roomId)
+            await dispatch('disconnectChannel', roomId);
+            commit('setOpen', false);
         },
 
         async switchRoom({commit, state, dispatch}, newRoomId) {
             if (state.room.id !== newRoomId) {
-                try {
-
-                    dispatch('disconnectChannel', state.room.id)
-                    commit('filterRoom', newRoomId)
-                    await dispatch('getMessages', newRoomId)
-                    console.log(1)
-                    await dispatch('connectToChannel', newRoomId)
-                } catch (error) {
-                    dispatch('closeChat', state.room.id)
-                    dispatch('exceptionModule/showException', error.response.data.message, {root: true})
-                }
+                await dispatch('disconnectChannel', state.room.id);
+                commit('filterRoom', newRoomId);
+                dispatch('connectToChannel', newRoomId);
             }
+        },
+
+        sendMessage({commit, state, dispatch}, newMessage) {
+
+            let timestamp = new Date()
+            timestamp.toLocaleString()
+
+            commit('addMessage', {
+                    message: newMessage,
+                    timestamp: timestamp,
+                    self: true
+                }
+            )
+
+            Api.post(`/api/chat/rooms/${state.room.id}/messages`, {message: newMessage}, {
+                "X-Socket-Id": Echo.socketId()
+            }).catch(error => {
+                dispatch('closeChat', state.room.id)
+                if (error.response) {
+                    dispatch('exceptionModule/showException', error.response.data.message, {root: true});
+                } else {
+                    console.log(error);
+                }
+            })
         }
+
     }
 }
 

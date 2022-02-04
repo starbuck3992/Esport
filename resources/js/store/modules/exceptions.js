@@ -8,33 +8,30 @@ const exceptionModule = {
     },
     getters: {
         show(state) {
-            return state.show
+            return state.show;
         },
         exception(state) {
-            return state.exception
+            return state.exception;
         }
     },
     mutations: {
         setShow(state) {
-            state.show = true
+            state.show = true;
         },
         setException(state, exception) {
-            state.exception.message = exception
+            state.show = true;
+            state.exception.message = exception;
         },
         clearException(state) {
-            state.show = false
-            state.exception.message = null
+            state.show = false;
+            state.exception.message = null;
         }
     },
     actions: {
         showException({commit}, exception) {
-            commit('setShow')
-            commit('setException', exception)
-        },
-        closeException({commit}) {
-            commit('clearException')
+            commit('setException', exception);
         }
     }
 }
 
-export default exceptionModule
+export default exceptionModule;

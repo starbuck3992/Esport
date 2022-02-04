@@ -1,106 +1,88 @@
 import axios from "axios";
-import store from "../store/index";
+import store from "../store";
 
-export const api = axios.create({
-    baseURL: process.env.VUE_APP_API_URL,
-    withCredentials: true,
-});
+class Api {
+    constructor() {
+        let axiosInstance = axios.create({
+            baseURL: process.env.VUE_APP_API_URL,
+            withCredentials: true
+        });
+        axiosInstance.interceptors.request.use((config) => {
+            store.commit('loadingModule/setLoading', true);
+            return config;
+        }, function (error) {
+            store.commit('loadingModule/setLoading', false);
+            return Promise.reject(error);
+        });
+        axiosInstance.interceptors.response.use(this.handleSuccess, this.handleError);
+        this.api = axiosInstance;
+    }
 
-// api.interceptors.response.use(
-//     (response) => {
-//         return response;
-//     },
-//     function (error) {
-//         if (
-//             [401, 403, 419].includes(error.response.status) &&
-//             store.getters['authUser']
-//         ) {
-//             store.dispatch('logout')
-//         }
-//         return Promise.reject(error);
-//     }
-// );
+    handleSuccess(response) {
 
-export default {
-    async login(payload) {
-        await api.get("/sanctum/csrf-cookie");
-        return api.post("/login", payload);
-    },
-    async socialAuth(provider) {
-        await api.get("/sanctum/csrf-cookie");
-        return api.get(`/api/authorize/${provider}/redirect`)
-    },
-    async socialLogin(provider, payload) {
-        return api.get(`/api/authorize/${provider}/login`, {
-                params: payload
-            }
-        )
-    },
-    logout() {
-        return api.post("/logout");
-    },
-    async forgotPassword(payload) {
-        await api.get("/sanctum/csrf-cookie");
-        return api.post("/forgot-password", payload);
-    },
-    async resetPassword(payload) {
-        await api.get("/sanctum/csrf-cookie");
-        return api.post("/reset-password", payload);
-    },
-    updatePassword(payload) {
-        return api.put("/user/password", payload);
-    },
-    async register(payload) {
-        await api.get("/sanctum/csrf-cookie");
-        return api.post("/register", payload);
-    },
-    sendVerification(payload) {
-        return api.post("/email/verification-notification", payload);
-    },
-    getUser(id) {
-        return api.get(`/api/user/${id}`);
-    },
+        store.commit('loadingModule/setLoading', false);
+        return response;
 
-    //Chat
-    setOnline(payload) {
-        return api.post('/api/chat/rooms', payload)
-    },
+    }
 
-   getRooms() {
-        return api.get('/api/chat/rooms')
-    },
-
-    getMessages(roomId) {
-        return api.get(`/api/chat/rooms/${roomId}/messages`)
-    },
-
-    sendMessage(roomId, payload) {
-        return api.post(`/api/chat/rooms/${roomId}/messages`,
-            payload, {
-                headers: {
-                    "X-Socket-Id": Echo.socketId()
-                }
-            }
-        );
-    },
-
-    getNotifications() {
-        return api.get('/api/notifications')
-    },
-
-    markAsRead(id) {
-        if (id) {
-
-            return api.put('/api/notifications',null,{params: {id: id}})
-
-        } else {
-
-            return api.put('/api/notifications')
-
+    handleError = (error) => {
+        store.commit('loadingModule/setLoading', false);
+        if (
+            [402, 403, 419].includes(error.response.status) &&
+            store.getters['userModule/loggedIn']
+        ) {
+            store.dispatch('userModule/logout').finally(function() {
+                    return Promise.reject(error);
+            })
         }
-    },
+        return Promise.reject(error);
+    }
 
-    // searchUsers(payload){
-    //     return api.post('api/users', payload)
-    // }
-};
+    get(path) {
+        return this.api.request({
+            method: 'GET',
+            url: path,
+            responseType: 'json'
+        })
+    }
+
+    patch(path, payload) {
+        return this.api.request({
+            method: 'PATCH',
+            url: path,
+            responseType: 'json',
+            data: payload
+        })
+    }
+
+    post(path, payload, headers) {
+        return this.api.request({
+            method: 'POST',
+            url: path,
+            responseType: 'json',
+            data: payload,
+            headers: headers
+        })
+    }
+
+    put(path, payload, parameters) {
+        return this.api.request({
+            method: 'PUT',
+            url: path,
+            responseType: 'json',
+            data: payload,
+            params: parameters
+        })
+    }
+
+    delete(path, payload) {
+        return this.api.request({
+            method: 'DELETE',
+            url: path,
+            responseType: 'json',
+            data: payload
+        })
+    }
+}
+
+export default new Api;

@@ -63,6 +63,7 @@ const app = Vue.createApp({
         onMounted(async () => {
             if (loggedIn.value) {
                 await store.dispatch('notificationsModule/getNotifications');
+                await store.dispatch('chatModule/getRooms');
             }
         })
     }

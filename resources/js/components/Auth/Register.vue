@@ -156,12 +156,13 @@
 </template>
 
 <script>
-import {toRefs, reactive} from 'vue'
-import {Dialog, DialogOverlay, DialogTitle, TransitionChild, TransitionRoot} from '@headlessui/vue'
-import {ExclamationIcon, XIcon} from '@heroicons/vue/outline'
-import api from "../../services/api"
-import Form from "../../utilities/form"
-import SocialAuth from "./SocialAuth"
+import {toRefs, reactive} from "vue";
+import {useStore} from "vuex";
+import {Dialog, DialogOverlay, DialogTitle, TransitionChild, TransitionRoot} from "@headlessui/vue";
+import {ExclamationIcon, XIcon} from '@heroicons/vue/outline';
+import Form from "../../utilities/form";
+import SocialAuth from "./SocialAuth";
+import router from "../../router";
 
 export default {
     props: {
@@ -184,18 +185,25 @@ export default {
         const {open} = toRefs(props)
         const form =
             reactive(new Form({
-                email: "",
-                nick: "",
-                password: "",
-                password_confirmation: ""
+                email: '',
+                nick: '',
+                password: '',
+                password_confirmation: ''
             }))
+        const store = useStore()
 
-        async function register() {
-            api.register(form.data()).then(response => {
+        function register() {
+            store.dispatch('userModule/register', form.data()).then(() => {
                 close()
+                router.push({name: 'registrationSuccessful'})
             }).catch(error => {
-                form.onFail(error.response.data.errors)
-            });
+                if (error.response.status === 422) {
+                    form.onFail(error.response.data.errors);
+                } else {
+                    close()
+                    store.dispatch('exceptionModule/showException', error.response.data.message);
+                }
+            })
         }
 
         function close() {

@@ -1,17 +1,18 @@
-import { createWebHistory, createRouter } from "vue-router"
-import store from '../store/index'
+import { createWebHistory, createRouter } from "vue-router";
+import store from "../store/index";
 
 //Auth
-import ResetPassword from '../components/Auth/ResetPassword'
-import ForgotPassword from '../components/Auth/ForgotPassword'
-import SocialLogin from "../components/Auth/SocialLogin"
+import ResetPassword from '../components/Auth/ResetPassword';
+import ForgotPassword from '../components/Auth/ForgotPassword';
+import SocialLogin from "../components/Auth/SocialLogin";
+import RegistrationSuccessful from "../components/Auth/RegistrationSuccessful";
 
 //Public
-import LandingPage from "../components/Public/LandingPage"
-import HomeIndex from "../components/Public/Home/Index"
-import ProfileIndex from "../components/Public/Profile/Index"
-import ProfileInformation from "../components/Public/Profile/Profile"
-import ProfilePassword from "../components/Public/Profile/Password"
+import LandingPage from "../components/Public/LandingPage";
+import HomeIndex from "../components/Public/Home/Index";
+import ProfileIndex from "../components/Public/Profile/Index";
+import ProfileInformation from "../components/Public/Profile/Profile";
+import ProfilePassword from "../components/Public/Profile/Password";
 
 //404
 let NotFound = {template: '<div>404</div>'}
@@ -44,6 +45,14 @@ const routes = [
                 path: 'forgot-password',
                 name: 'forgotPassword',
                 component: ForgotPassword,
+                meta: {
+                    guest: true
+                },
+            },
+            {
+                path: 'registration-successful',
+                name: 'registrationSuccessful',
+                component: RegistrationSuccessful,
                 meta: {
                     guest: true
                 },

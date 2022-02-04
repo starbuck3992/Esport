@@ -56,14 +56,11 @@
 <script>
 import {computed, ref} from 'vue'
 import {useStore} from 'vuex'
-import api from '../../../services/api'
 import ChatMessages from './ChatMessages'
-import Exception from '../../Exception.vue'
 
 export default {
     components: {
-        ChatMessages,
-        Exception
+        ChatMessages
     },
     props: {
         room: {
@@ -87,37 +84,16 @@ export default {
             }, 1000)
         }
 
-        async function sendMessage() {
-            let timestamp = new Date()
-            timestamp.toLocaleString()
-
-            store.commit('chatModule/addMessage', {
-                    message: newMessage.value,
-                    timestamp: timestamp,
-                    self: true
-                }
+        function sendMessage() {
+            store.dispatch('chatModule/sendMessage', newMessage.value).finally(
+                newMessage.value = ''
             )
-
-            await api.sendMessage(props.room.id, {
-                message: newMessage.value
-            }).then(response => {
-                console.log(response.data)
-            }).catch(error => {
-                store.dispatch('exceptionModule/showException', error.response.data.message)
-            }).finally(
-                newMessage.value = null
-            )
-        }
-
-        function closeException() {
-            store.dispatch('exceptionModule/closeException')
         }
 
         return {
             newMessage,
             setTyping,
-            sendMessage,
-            closeException
+            sendMessage
         }
     }
 }
