@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Providers\RouteServiceProvider;
+use App\Http\Resources\LoginResource;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -24,9 +24,9 @@ class RedirectIfAuthenticated
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
                 if ($request->expectsJson()) {
-                    return response()->json(['error' => 'Already authenticated.']);
+                    return new LoginResource(Auth::user());
                 }
-                return redirect(RouteServiceProvider::HOME);
+                return redirect('/');
             }
         }
         return $next($request);

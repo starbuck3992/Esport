@@ -6,6 +6,7 @@ import ResetPassword from '../components/Auth/ResetPassword';
 import ForgotPassword from '../components/Auth/ForgotPassword';
 import SocialLogin from "../components/Auth/SocialLogin";
 import RegistrationSuccessful from "../components/Auth/RegistrationSuccessful";
+let EmailVerification = {template: '<div>Ahoj</div>'}
 
 //Public
 import LandingPage from "../components/Public/LandingPage";
@@ -57,6 +58,11 @@ const routes = [
                     guest: true
                 },
             },
+            // {
+            //     path: 'email',
+            //     name: 'emailVerification',
+            //     component: EmailVerification
+            // },
             {
                 path: 'profile',
                 name: 'profileIndex',
@@ -76,10 +82,10 @@ const routes = [
             },
         ]
     },
-    {
-        path: '/:pathMatch(.*)*',
-        component:NotFound
-    },
+    // {
+    //     path: '/:pathMatch(.*)*',
+    //     component:NotFound
+    // },
 ];
 
 

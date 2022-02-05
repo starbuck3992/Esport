@@ -85,8 +85,9 @@
                                             </div>
 
                                             <div class="text-sm">
-                                                <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">
-                                                    Zapoměl jsi heslo?
+                                                <a href="#" v-on:click.prevent="forgotPassword"
+                                                   class="font-medium text-indigo-600 hover:text-indigo-500">
+                                                    Zapomněl jsi heslo?
                                                 </a>
                                             </div>
                                         </div>
@@ -122,6 +123,7 @@ import {Dialog, DialogOverlay, DialogTitle, TransitionChild, TransitionRoot} fro
 import {ExclamationIcon, XIcon} from "@heroicons/vue/outline";
 import Form from "../../utilities/form";
 import SocialAuth from "./SocialAuth";
+import router from "../../router";
 
 export default {
     props: {
@@ -150,24 +152,24 @@ export default {
             }))
         const store = useStore()
 
-        function login() {
-            store.dispatch('userModule/login', form.data()).then((response) => {
-                store.commit('userModule/createSession', response.data);
-                store.dispatch('notificationsModule/getNotifications');
-                store.dispatch('chatModule/getRooms');
+        async function login() {
+            try {
+                await store.dispatch('userModule/login', form.data());
+                await store.dispatch('notificationsModule/getNotifications');
+                await store.dispatch('chatModule/getRooms');
                 close();
-            }).catch((error) => {
+            } catch (error) {
                 if (error.response) {
                     if (error.response.status === 422) {
                         form.onFail(error.response.data.errors);
                     } else {
                         close();
-                        store.dispatch('exceptionModule/showException', error.response.data.message);
+                        setTimeout(() => store.dispatch('messagesModule/showException', error.response.data.message), 250)
                     }
                 } else {
                     console.log(error);
                 }
-            })
+            }
         }
 
         function close() {
@@ -179,12 +181,19 @@ export default {
             emit('openRegister')
         }
 
+        function forgotPassword(){
+            form.reset()
+            emit('close')
+            router.push({name: 'forgotPassword'});
+        }
+
         return {
             open,
             form,
             login,
             close,
-            openRegister
+            openRegister,
+            forgotPassword
         }
     }
 }

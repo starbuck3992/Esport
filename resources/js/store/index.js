@@ -5,7 +5,7 @@ import userModule from './modules/user'
 import chatModule from './modules/chat'
 import notificationsModule from './modules/notifications'
 import loadingModule from './modules/loading'
-import exceptionModule from './modules/exceptions'
+import messagesModule from './modules/messages'
 
 const store = createStore(
     {
@@ -17,7 +17,7 @@ const store = createStore(
             chatModule,
             notificationsModule,
             loadingModule,
-            exceptionModule
+            messagesModule
         },
     }
 )

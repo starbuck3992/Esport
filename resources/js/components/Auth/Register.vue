@@ -192,18 +192,23 @@ export default {
             }))
         const store = useStore()
 
-        function register() {
-            store.dispatch('userModule/register', form.data()).then(() => {
-                close()
-                router.push({name: 'registrationSuccessful'})
-            }).catch(error => {
-                if (error.response.status === 422) {
-                    form.onFail(error.response.data.errors);
+        async function register() {
+            try {
+                await store.dispatch('userModule/register', form.data());
+                await router.push({name: 'registrationSuccessful'});
+                close();
+            } catch (error) {
+                if (error.response) {
+                    if (error.response.status === 422) {
+                        form.onFail(error.response.data.errors);
+                    } else {
+                        close();
+                        setTimeout(() => store.dispatch('messagesModule/showException', error.response.data.message), 250)
+                    }
                 } else {
-                    close()
-                    store.dispatch('exceptionModule/showException', error.response.data.message);
+                    console.log(error);
                 }
-            })
+            }
         }
 
         function close() {

@@ -6,14 +6,15 @@
 
 <script>
 
-import {onMounted} from 'vue'
-import {useStore} from 'vuex'
-import {useRoute} from 'vue-router'
+import {onMounted} from "vue";
+import {useStore} from "vuex";
+import {useRoute} from "vue-router";
+import router from "../../router";
 
 export default {
     setup() {
-        const route = useRoute()
-        const store = useStore()
+        const route = useRoute();
+        const store = useStore();
         const payload = {
             provider: route.params.provider,
             parameters: {
@@ -21,10 +22,18 @@ export default {
                 code: route.query.code
             }
         }
-        onMounted(() => {
-            store.dispatch('socialLogin', payload).then(response =>
-                window.location.href = response.data.meta.url
-            )
+        onMounted(async () => {
+            try{
+                let response = await store.dispatch('userModule/socialLogin', payload);
+                window.location.href = response.data.meta.url;
+            } catch (error) {
+                if (error.response) {
+                    setTimeout(() => store.dispatch('messagesModule/showException', error.response.data.message), 250);
+                    await router.push({name: 'homeIndex'});
+                } else {
+                    console.log(error);
+                }
+            }
         })
     }
 }

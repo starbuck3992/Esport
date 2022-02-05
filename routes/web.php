@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\RegisteredUserController;
 use Illuminate\Support\Facades\Route;
+use Laravel\Fortify\Http\Controllers\PasswordResetLinkController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,6 +16,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('/register', [RegisteredUserController::class, 'store']);
+$limiter = config('fortify.limiters.forgot-password');
+
+Route::post(config('fortify.prefix', 'fortify') . '/forgot-password', [PasswordResetLinkController::class, 'store'])
+    ->middleware(['guest', 'throttle:' . $limiter]);
 
 Route::get('/{any}', function () {
     return view('app');

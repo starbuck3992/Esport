@@ -97,14 +97,14 @@
                 </div>
 
                 <div class="col-span-12 sm:col-span-6">
-                    <label for="company" class="block text-sm font-medium text-gray-700">Playstation</label>
-                    <input type="text" name="company" id="company" autocomplete="organization"
+                    <label for="playstation" class="block text-sm font-medium text-gray-700">Playstation</label>
+                    <input type="text" name="company" id="playstation" autocomplete="organization"
                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm"/>
                 </div>
 
                 <div class="col-span-12 sm:col-span-6">
-                    <label for="company" class="block text-sm font-medium text-gray-700">Xbox</label>
-                    <input type="text" name="company" id="company" autocomplete="organization"
+                    <label for="xbox" class="block text-sm font-medium text-gray-700">Xbox</label>
+                    <input type="text" name="company" id="xbox" autocomplete="organization"
                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm"/>
                 </div>
 
@@ -188,8 +188,10 @@
 </template>
 
 <script>
-import {ref, onMounted, computed} from 'vue'
-import {useStore} from 'vuex'
+import {ref, onMounted, computed} from "vue";
+import {useStore} from 'vuex';
+import Api from "../../../services/api";
+
 import {
     Switch,
     SwitchDescription,
@@ -199,8 +201,6 @@ import {
 import {
     XIcon,
 } from '@heroicons/vue/outline'
-
-import api from '../../../services/api'
 
 export default {
     components: {
@@ -214,25 +214,40 @@ export default {
         const availableToHire = ref(true)
         const allowCommenting = ref(false)
         const allowMentions = ref(true)
-        const user = ref(null)
-        const store = useStore()
-        const loggedUser = computed(() => store.getters["userModule/user"])
+        const user = ref(null);
+        const store = useStore();
+        const loggedUser = computed(() => store.getters['userModule/user'].id);
 
-        onMounted(async () => {
-                await api.getUser(loggedUser.value.id).then(response =>
+        onMounted(() => {
+                Api.get(`/api/user/${loggedUser.value}`).then((response) => {
                     user.value = response.data
-                )
+                }).catch((error) => {
+                    if (error.response) {
+                        setTimeout(() => store.dispatch('messagesModule/showException', error.response.data.message), 250)
+                    } else {
+                        console.log(error);
+                    }
+                })
             }
         )
 
-        function checkProvider(provider){
-                return user.value.providers.some(function (o) {
-                    return o["name"] === provider
-                })
+        function checkProvider(provider) {
+            return user.value.providers.some(function (o) {
+                return o["name"] === provider
+            })
         }
 
         function socialAuth(provider) {
-            store.dispatch('socialAuth', provider)
+            console.log(provider)
+            store.dispatch('userModule/socialAuth', provider).then((response) => {
+                window.location.href = response.data.url;
+            }).catch((error) => {
+                if (error.response) {
+                    setTimeout(() => store.dispatch('messagesModule/showException', error.response.data.message), 250);
+                } else {
+                    console.log(error);
+                }
+            })
         }
 
         return {

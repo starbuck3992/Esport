@@ -3,8 +3,10 @@
 </template>
 
 <script>
-import {useStore} from 'vuex'
-import {toRefs} from 'vue'
+import {useStore} from "vuex";
+import {toRefs} from "vue";
+import router from "../../router";
+
 export default {
     props: {
         active: {
@@ -12,11 +14,24 @@ export default {
         }
     },
     setup(props) {
-        const {active} = toRefs(props)
-        const store = useStore()
-        async function logout(){
-            await store.dispatch('userModule/logout')
+        const {active} = toRefs(props);
+        const store = useStore();
+
+        async function logout() {
+            try {
+                await store.dispatch('userModule/logout');
+                await store.dispatch('notificationsModule/clearNotifications');
+                await store.dispatch('chatModule/clearRooms');
+                await router.push({name: 'homeIndex'});
+            } catch (error) {
+                if (error.response) {
+                    setTimeout(() => store.commit('messagesModule/showException', error.response.data.message), 250)
+                } else {
+                    console.log(error);
+                }
+            }
         }
+
         return {
             active,
             logout
@@ -24,4 +39,3 @@ export default {
     }
 };
 </script>
-

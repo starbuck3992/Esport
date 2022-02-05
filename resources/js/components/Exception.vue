@@ -1,5 +1,5 @@
 <template>
-    <TransitionRoot as="template" :show="showException">
+    <TransitionRoot as="template" :show="show">
         <Dialog as="div" class="fixed z-20 inset-0 overflow-y-auto" @close="closeException">
             <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
                 <TransitionChild as="template" enter="ease-out duration-300" enter-from="opacity-0"
@@ -31,7 +31,7 @@
                             <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                                 <DialogTitle as="h3" class="text-lg leading-6 font-medium text-gray-900">Chyba</DialogTitle>
                                 <div class="mt-2">
-                                    <p class="text-sm text-gray-500">{{ exception.message }}</p>
+                                    <p class="text-sm text-gray-500">{{ exceptionMessage }}</p>
                                 </div>
                             </div>
                         </div>
@@ -50,8 +50,8 @@
 </template>
 
 <script>
-import {computed} from "vue"
-import {useStore} from "vuex"
+import {computed} from "vue";
+import {useStore} from "vuex";
 
 import {Dialog, DialogOverlay, DialogTitle, TransitionChild, TransitionRoot} from '@headlessui/vue';
 import {ExclamationIcon, XIcon} from '@heroicons/vue/outline';
@@ -69,16 +69,16 @@ export default {
     setup() {
         const store = useStore();
 
-        const showException = computed(() => store.getters['exceptionModule/show']);
-        const exception = computed(() => store.getters['exceptionModule/exception']);
+        const show = computed(() => store.getters['messagesModule/exception'].show);
+        const exceptionMessage = computed(() => store.getters['messagesModule/exception'].message);
 
         function closeException(){
-            store.commit('exceptionModule/clearException');
+            store.commit('messagesModule/clearException');
         }
 
         return {
-            showException,
-            exception,
+            show,
+            exceptionMessage,
             closeException
         }
     }

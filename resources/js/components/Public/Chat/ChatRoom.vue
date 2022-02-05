@@ -1,6 +1,6 @@
 <template>
     <!-- Room -->
-    <section v-if="room" aria-labelledby="room-heading"
+    <section v-if="room.id" aria-labelledby="room-heading"
              class="min-w-0 flex-1 h-full flex flex-col overflow-hidden xl:order-last">
         <div class="flex-shrink-0 bg-white border-b border-gray-200 py-6">
             <!-- Room header -->
@@ -54,9 +54,9 @@
 </template>
 
 <script>
-import {computed, ref} from 'vue'
-import {useStore} from 'vuex'
-import ChatMessages from './ChatMessages'
+import {computed, ref} from "vue";
+import {useStore} from "vuex";
+import ChatMessages from "./ChatMessages";
 
 export default {
     components: {
@@ -69,13 +69,13 @@ export default {
         }
     },
     setup(props) {
-        const store = useStore()
-        const user = computed(() => store.getters['userModule/user'])
-        const newMessage = ref(null)
+        const store = useStore();
+        const user = computed(() => store.getters['userModule/user']);
+        const newMessage = ref(null);
 
         function setTyping() {
 
-            let channel = Echo.private('chat.' + props.room.id)
+            let channel = Echo.private('chat.' + props.room.id);
 
             setTimeout( () => {
                 channel.whisper('Typing', {

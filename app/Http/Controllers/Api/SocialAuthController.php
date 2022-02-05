@@ -33,12 +33,13 @@ class SocialAuthController extends Controller
         $url = Session::get('urlPrevious', url('/'));
 
         // Link social account
-        if(Auth::check()){
+        if (Auth::check()) {
             User::find(Auth::id())->providers()
                 ->firstOrCreate([
                     'provider' => $provider,
                     'provider_id' => $socialUser->getId()
-                ]);
+                ],
+                    ['avatar' => $socialUser->getAvatar()]);
             Session::forget('urlPrevious');
             return (new JsonResponse(['meta' => [
                 'url' => $url,
@@ -72,7 +73,7 @@ class SocialAuthController extends Controller
 
             Session::forget('urlPrevious');
 
-            return response()->json(['error' => 'Uživatel s daným emailem již existuje'], 422);
+            return response()->json(['message' => 'Uživatel s daným emailem již existuje'], 422);
 
         }
 
@@ -80,14 +81,15 @@ class SocialAuthController extends Controller
         $userCreated = User::create([
             'nick' => $socialUser->getName(),
             'email' => $socialUser->getEmail(),
-            'avatar' => $socialUser->getAvatar()
+            'image_id' => 1
         ]);
 
         // Create provider
         $userCreated->providers()
             ->create([
                 'provider' => $provider,
-                'provider_id' => $socialUser->getId()
+                'provider_id' => $socialUser->getId(),
+                'avatar' => $socialUser->getAvatar()
             ]);
 
         Session::forget('urlPrevious');

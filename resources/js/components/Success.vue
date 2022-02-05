@@ -1,6 +1,6 @@
 <template>
-    <TransitionRoot as="template" :show="open">
-        <Dialog as="div" class="fixed z-100 inset-0 overflow-y-auto" @close="close">
+    <TransitionRoot as="template" :show="show">
+        <Dialog as="div" class="fixed z-10 inset-0 overflow-y-auto" @close="closeSuccess">
             <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
                 <TransitionChild as="template" enter="ease-out duration-300" enter-from="opacity-0"
                                  enter-to="opacity-100" leave="ease-in duration-200" leave-from="opacity-100"
@@ -24,7 +24,7 @@
                                     Ok
                                 </DialogTitle>
                                 <div class="mt-2">
-                                    <p class="text-sm text-gray-500">{{ message }}
+                                    <p class="text-sm text-gray-500">{{ successMessage }}
                                     </p>
                                 </div>
                             </div>
@@ -32,7 +32,7 @@
                         <div class="mt-5 sm:mt-6">
                             <button type="button"
                                     class="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
-                                    @click="close">
+                                    @click="closeSuccess">
                                 Rozumím
                             </button>
                         </div>
@@ -44,9 +44,11 @@
 </template>
 
 <script>
-import {toRefs} from 'vue'
-import {Dialog, DialogOverlay, DialogTitle, TransitionChild, TransitionRoot} from '@headlessui/vue'
-import {CheckIcon} from '@heroicons/vue/outline'
+import {computed} from "vue";
+import {useStore} from "vuex";
+
+import {Dialog, DialogOverlay, DialogTitle, TransitionChild, TransitionRoot} from '@headlessui/vue';
+import {CheckIcon} from "@heroicons/vue/solid";
 
 export default {
     components: {
@@ -55,31 +57,23 @@ export default {
         DialogTitle,
         TransitionChild,
         TransitionRoot,
-        CheckIcon,
+        CheckIcon
     },
-    props: {
-        open: {
-            type: Boolean,
-            required: true
-        },
-        message: {
-            type: String,
-            default: ''
-        }
-    },
-    setup(props, {emit}) {
-        let open = toRefs(props).open
-        let message = toRefs(props).message
+    setup() {
+        const store = useStore();
 
-        function close(){
-            emit('close')
+        const show = computed(() => store.getters['messagesModule/success'].show);
+        const successMessage = computed(() => store.getters['messagesModule/success'].message);
+
+        function closeSuccess(){
+            store.commit('messagesModule/clearSuccess');
         }
 
         return {
-            open,
-            message,
-            close
+            show,
+            successMessage,
+            closeSuccess
         }
-    },
-}
+    }
+};
 </script>

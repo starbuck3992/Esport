@@ -28,7 +28,7 @@ class Api {
     handleError = (error) => {
         store.commit('loadingModule/setLoading', false);
         if (
-            [402, 403, 419].includes(error.response.status) &&
+            [401, 403, 419].includes(error.response.status) &&
             store.getters['userModule/loggedIn']
         ) {
             store.dispatch('userModule/logout').finally(function() {
@@ -38,11 +38,12 @@ class Api {
         return Promise.reject(error);
     }
 
-    get(path) {
+    get(path, parameters) {
         return this.api.request({
             method: 'GET',
             url: path,
-            responseType: 'json'
+            responseType: 'json',
+            params: parameters
         })
     }
 

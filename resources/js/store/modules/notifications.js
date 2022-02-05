@@ -25,22 +25,24 @@ const notificationModule = {
         },
         deleteAllNotifications(state) {
             state.notifications.splice(0)
-        },
+        }
     },
     actions: {
-        getNotifications({commit, dispatch, rootGetters}) {
-            Api.get('/api/notifications').then((response) => {
-                commit('setNotifications', response.data);
-                Echo.private('user.' + rootGetters['userModule/user'].id)
-                    .notification((notification) => {
-                        commit('setNotification', notification)
-                    })
-            }).catch((error) => {
-                if (error.response) {
-                    dispatch('exceptionModule/showException', error.response.data.message, {root: true});
-                } else {
-                    console.log(error);
-                }
+        clearNotifications({commit}) {
+            commit('deleteAllNotifications');
+        },
+        getNotifications({commit, rootGetters}) {
+            return new Promise((resolve, reject) => {
+                Api.get('/api/notifications').then((response) => {
+                    commit('setNotifications', response.data);
+                    Echo.private('user.' + rootGetters['userModule/user'].id)
+                        .notification((notification) => {
+                            commit('setNotification', notification)
+                        })
+                    resolve(response)
+                }).catch((error) => {
+                    reject(error)
+                })
             })
         },
         readSingleNotification({commit, state}, index) {

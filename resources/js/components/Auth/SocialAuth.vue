@@ -10,8 +10,8 @@
         <div>
             <button v-on:click="socialAuth('discord')"
                     class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                <img class="w-12 h-12" src="/storage/social/f_logo_RGB-Blue_58.png" alt="facebook_logo">
-                <span>Pokračovat přes Facebook</span>
+                <img class="w-12 h-12" src="/storage/social/f_logo_RGB-Blue_58.png" alt="discord_logo">
+                <span>Pokračovat přes Discord</span>
             </button>
         </div>
         <div>
@@ -25,16 +25,23 @@
 </template>
 
 <script>
-import {useStore} from 'vuex'
+import {useStore} from "vuex";
 
 export default {
     setup() {
-        const store = useStore()
+        const store = useStore();
 
         function socialAuth(provider) {
-            store.dispatch('socialAuth', provider)
+            store.dispatch('userModule/socialAuth', provider).then((response) => {
+                window.location.href = response.data.url;
+            }).catch((error) => {
+                if (error.response) {
+                    setTimeout(() => store.dispatch('messagesModule/showException', error.response.data.message), 250);
+                } else {
+                    console.log(error);
+                }
+            })
         }
-
         return {
             socialAuth
         }

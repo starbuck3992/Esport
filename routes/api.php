@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\ChatController;
 use App\Http\Controllers\Api\NotificationController;
+use App\Http\Controllers\Api\SocialAuthController;
 use App\Http\Controllers\Api\UserController;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -43,27 +44,8 @@ Route::post('/users', [UserController::class, 'search']);
         $user->notify(new App\Notifications\RoomCreated('Hello World'));
     });
 
-
-
-
-
-
-
-
-
-
-
-//Route::get('/authorize/{provider}/redirect', [\App\Http\Controllers\SocialAuthController::class, 'redirect']);
-//Route::get('/authorize/{provider}/login', [\App\Http\Controllers\SocialAuthController::class, 'login']);
-//
-//Route::get('/authorize/{provider}/redirect', [SocialAuthController::class, 'redirect']);
-//Route::get('/authorize/{provider}/login', [SocialAuthController::class, 'login']);
-//
-//Route::get('login/{provider}', [LoginController::class, 'redirectToProvider']);
-//Route::get('login/{provider}/callback', [LoginController::class, 'handleProviderCallback']);
-//
-//Route::get('login/{provider}', [\App\Http\Controllers\Api\Login2::class, 'redirectToProvider']);
-//Route::get('login/{provider}/callback', [\App\Http\Controllers\Api\Login2::class, 'handleProviderCallback']);
+Route::get('/authorize/{provider}/redirect', [SocialAuthController::class, 'redirect']);
+Route::get('/authorize/{provider}/login', [SocialAuthController::class, 'login']);
 
 
 
