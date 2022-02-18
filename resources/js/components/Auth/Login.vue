@@ -76,7 +76,7 @@
 
                                         <div class="flex items-center justify-between">
                                             <div class="flex items-center">
-                                                <input v-model="form.rememberMe" id="remember-me" name="remember-me"
+                                                <input v-model="form.remember" id="remember-me" name="remember-me"
                                                        type="checkbox"
                                                        class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"/>
                                                 <label for="remember-me" class="ml-2 block text-sm text-gray-900">
@@ -148,13 +148,13 @@ export default {
             reactive(new Form({
                 email: '',
                 password: '',
-                rememberMe: false
+                remember: false
             }))
         const store = useStore()
 
         async function login() {
             try {
-                await store.dispatch('userModule/login', form.data());
+                await store.dispatch('userModule/login', form.objectToFormData());
                 await store.dispatch('notificationsModule/getNotifications');
                 await store.dispatch('chatModule/getRooms');
                 close();

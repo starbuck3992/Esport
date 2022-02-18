@@ -121,10 +121,9 @@ const chatModule = {
 
             let timer;
 
-            console.log(1)
-
             try {
                 await dispatch('getMessages', roomId);
+                await dispatch('setOnline', roomId);
 
                 await Echo.private('chat.' + roomId)
                     .listen('MessageSent', (e) => {

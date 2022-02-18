@@ -15,10 +15,10 @@ class ImageSeeder extends Seeder
     public function run()
     {
         DB::table('images')->insert([
-                'original_name' => 'default_avatar.svg',
-                'path' => 'avatar/default_avatar.svg',
-                'extension' => 'svg',
-                'size' => 939
+                'original_name' => 'user.png',
+                'path' => 'images/avatars/default/user.png',
+                'extension' => 'png',
+                'size' => 937
             ]
         );
     }

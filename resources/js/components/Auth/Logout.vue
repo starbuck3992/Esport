@@ -20,8 +20,6 @@ export default {
         async function logout() {
             try {
                 await store.dispatch('userModule/logout');
-                await store.dispatch('notificationsModule/clearNotifications');
-                await store.dispatch('chatModule/clearRooms');
                 await router.push({name: 'homeIndex'});
             } catch (error) {
                 if (error.response) {

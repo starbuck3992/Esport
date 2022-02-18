@@ -8,6 +8,10 @@ import SocialLogin from "../components/Auth/SocialLogin";
 import RegistrationSuccessful from "../components/Auth/RegistrationSuccessful";
 let EmailVerification = {template: '<div>Ahoj</div>'}
 
+//Admin
+import TournamentCreate from "../components/Admin/Tournament/TournamentCreate";
+import TournamentShow from "../components/Public/Tournament/TournamentShow";
+
 //Public
 import LandingPage from "../components/Public/LandingPage";
 import HomeIndex from "../components/Public/Home/Index";
@@ -79,6 +83,16 @@ const routes = [
                         component: ProfilePassword,
                     },
                 ]
+            },
+            {
+                path: 'admin/tournaments/create',
+                name: 'tournamentCreate',
+                component: TournamentCreate
+            },
+            {
+                path: 'tournaments/:slug',
+                name: 'tournamentShow',
+                component: TournamentShow
             },
         ]
     },

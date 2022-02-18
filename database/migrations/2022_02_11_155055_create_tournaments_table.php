@@ -1,0 +1,50 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateTournamentsTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('tournaments', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('platform_id')->constrained();
+            $table->foreignId('game_id')->constrained();
+            $table->foreignId('tournament_status_id')->constrained();
+            $table->foreignId('tournament_type_id')->constrained();
+            $table->foreignId('currency_id')->constrained();
+            $table->string('name')->unique();
+            $table->longText('information');
+            $table->integer('fee');
+            $table->dateTimeTz('schedule_start');
+            $table->dateTimeTz('schedule_end')->nullable();
+            $table->string('registration_sequence');
+            $table->string('slug');
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::table('tournaments', function (Blueprint $table) {
+            $table->dropForeign(['platform_id']);
+            $table->dropForeign(['game_id']);
+            $table->dropForeign(['tournament_status_id']);
+            $table->dropForeign(['tournament_type_id']);
+            $table->dropForeign(['currency_id']);
+        });
+        Schema::dropIfExists('tournaments');
+    }
+}

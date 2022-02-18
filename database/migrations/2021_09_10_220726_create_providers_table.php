@@ -16,7 +16,8 @@ class CreateProvidersTable extends Migration
         Schema::create('providers', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('provider');
-            $table->string('avatar');
+            $table->string('name')->nullable();
+            $table->string('avatar')->nullable();
             $table->string('provider_id');
             $table->bigInteger('user_id')->unsigned();
             $table->timestamps();

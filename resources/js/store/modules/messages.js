@@ -20,12 +20,12 @@ const messagesModule = {
     },
     mutations: {
         setSuccess(state, message) {
-            state.success.show = true;
             state.success.message = message;
+            state.success.show = true;
         },
         setException(state, message) {
-            state.exception.show = true;
             state.exception.message = message;
+            state.exception.show = true;
         },
         clearSuccess(state) {
             state.success.show = false;

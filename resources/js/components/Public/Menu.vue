@@ -112,6 +112,8 @@
                 <!-- Top navigation -->
                 <div class="bg-gray-900">
                     <div class="max-w-7xl mx-auto h-10 px-4 flex items-center justify-end sm:px-6 lg:px-8">
+                        <router-link class="text-white" :to="{ name: 'tournamentShow' , params: {slug: 'eeeew' }}">Turnaj X</router-link>
+                        <router-link class="text-white" :to="{ name: 'tournamentCreate' }">Turnaj</router-link>
                         <div v-if="loggedIn" class="flex items-center space-x-6">
                             <div class="text-white">Přihlášen uživatel : <span>{{ user.nick }}</span></div>
                             <a href="#" class="text-sm font-medium text-white hover:text-gray-100" @click="openChat">Chat</a>

@@ -194,7 +194,7 @@ export default {
 
         async function register() {
             try {
-                await store.dispatch('userModule/register', form.data());
+                await store.dispatch('userModule/register', form.objectToFormData());
                 await router.push({name: 'registrationSuccessful'});
                 close();
             } catch (error) {

@@ -1,5 +1,6 @@
 import axios from "axios";
 import store from "../store";
+import router from "../router";
 
 class Api {
     constructor() {
@@ -25,15 +26,22 @@ class Api {
 
     }
 
-    handleError = (error) => {
+    handleError = async (error) => {
         store.commit('loadingModule/setLoading', false);
-        if (
-            [401, 403, 419].includes(error.response.status) &&
-            store.getters['userModule/loggedIn']
-        ) {
-            store.dispatch('userModule/logout').finally(function() {
-                    return Promise.reject(error);
-            })
+        if ([401, 403, 419].includes(error.response.status)) {
+            try {
+                if (store.getters['userModule/loggedIn']) {
+                    await store.dispatch('userModule/logout');
+                    await router.push({name: 'homeIndex'});
+                }
+                await router.push({name: 'homeIndex'});
+            } catch (error) {
+                if (error.response) {
+                    setTimeout(() => store.commit('messagesModule/showException', error.response.data.message), 250)
+                } else {
+                    console.log(error);
+                }
+            }
         }
         return Promise.reject(error);
     }

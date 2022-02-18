@@ -1,5 +1,4 @@
 import Api from "../../services/api";
-import Echo from "laravel-echo";
 
 const user = {
     namespaced: true,
@@ -24,37 +23,15 @@ const user = {
             state.user.nick = user.nick;
             state.user.avatar = user.avatar;
         },
+        updateSession(state, user) {
+            state.user.nick = user.nick;
+            state.user.avatar = user.avatar;
+        },
         destroySession(state) {
             Object.keys(state.user).forEach(k => state.user[k] = null);
         }
     },
     actions: {
-        authorizePusher({}) {
-            window.Echo = new Echo({
-                broadcaster: 'pusher',
-                key: process.env.MIX_PUSHER_APP_KEY,
-                cluster: process.env.MIX_PUSHER_APP_CLUSTER,
-                forceTLS: true,
-                authorizer: (channel) => {
-                    return {
-                        authorize: (socketId, callback) => {
-                            Api.post('/api/broadcasting/auth', {
-                                socket_id: socketId,
-                                channel_name: channel.name
-                            })
-                                .then(response => {
-                                    callback(false, response.data)
-                                })
-                                .catch(error => {
-                                    callback(true, error)
-
-                                })
-                        }
-                    }
-                },
-            })
-        },
-
         async register({}, payload) {
             await Api.get('/sanctum/csrf-cookie');
             return new Promise((resolve, reject) => {
@@ -113,6 +90,8 @@ const user = {
             return new Promise((resolve, reject) => {
                 Api.post('/logout').then((response) => {
                     commit('destroySession')
+                    commit('notificationsModule/deleteAllNotifications', null, {root: true})
+                    commit('chatModule/clearRooms', null, {root: true})
                     resolve(response)
                 }).catch((error) => {
                     reject(error)

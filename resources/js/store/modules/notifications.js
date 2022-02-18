@@ -28,9 +28,6 @@ const notificationModule = {
         }
     },
     actions: {
-        clearNotifications({commit}) {
-            commit('deleteAllNotifications');
-        },
         getNotifications({commit, rootGetters}) {
             return new Promise((resolve, reject) => {
                 Api.get('/api/notifications').then((response) => {
