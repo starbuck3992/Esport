@@ -21,10 +21,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/users/{id}', [UserController::class, 'show']);
     Route::post('/users/edit', [UserController::class, 'updateInformation']);
 
+    Route::post('/tournaments/register', [TournamentController::class, 'registerParticipant']);
+
     Route::group(['prefix' => 'admin' , 'middleware' => ['admin']], function () {
         Route::get('/tournaments/create', [TournamentController::class, 'getCreateFormData']);
         Route::post('/tournaments', [TournamentController::class, 'createTournament']);
-        Route::post('/tournaments/register', [TournamentController::class, 'register']);
     });
 });
 

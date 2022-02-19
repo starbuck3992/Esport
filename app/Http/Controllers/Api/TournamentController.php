@@ -15,6 +15,7 @@ use App\Models\Platform;
 use App\Models\Tournament;
 use App\Models\TournamentType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Throwable;
@@ -91,23 +92,18 @@ class TournamentController extends Controller
 
     }
 
-    public function register(Request $request)
+    public function registerParticipant(Request $request)
     {
-
-        //check if user can register
-
-
-        $tournament = Tournament::where('id', $request->id)->firstorfail();
-
 
         try {
 
-            return [
-                'games' => GameResource::collection(Game::all()),
-                'platforms' => PlatformResource::collection(Platform::all()),
-                'tournamentTypes' => TournamentTypeResource::collection(TournamentType::all()),
-                'currencies' => CurrencyResource::collection(Currency::all()),
-            ];
+            $userId = Auth::id();
+
+            //check if user can register
+            $tournament = Tournament::where('slug', $request->slug)->where('tournament_status_id', 1)->whereHas(
+                'tournamentMatches', function ($query) use ($userId) {
+                $query->where('user_guest', '!=', $userId)->orWhere('user_home', '!=', $userId);
+            })->firstorfail();
 
         } catch (Throwable $e) {
 
@@ -126,10 +122,9 @@ class TournamentController extends Controller
                 ->where('slug', $slug)->firstOrFail();
 
             //Count players
-
             $player_count = $tournament->tournamentMatches()->select(
-                    DB::raw('COUNT(DISTINCT team_guest) + COUNT(DISTINCT team_home) + COUNT(DISTINCT user_guest) + COUNT(DISTINCT user_home) AS SUM'))
-                    ->whereBetween('bracket_position', [1, $tournament->tournamentType->max_players / 2])->get()->toArray()[0]['SUM'];
+                DB::raw('COUNT(DISTINCT team_guest) + COUNT(DISTINCT team_home) + COUNT(DISTINCT user_guest) + COUNT(DISTINCT user_home) AS SUM'))
+                ->whereBetween('bracket_position', [1, $tournament->tournamentType->max_players / 2])->get()->toArray()[0]['SUM'];
 
             return (new TournamentShowResource(Tournament::with(['platform', 'game', 'tournamentType', 'tournamentStatus', 'currency'])
                 ->where('slug', $slug)->firstOrFail()))->additional(['registered_count' => $player_count]);
