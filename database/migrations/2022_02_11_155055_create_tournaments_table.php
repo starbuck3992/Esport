@@ -26,6 +26,8 @@ class CreateTournamentsTable extends Migration
             $table->dateTimeTz('schedule_start');
             $table->dateTimeTz('schedule_end')->nullable();
             $table->string('registration_sequence');
+            $table->integer('max_players');
+            $table->integer('registered_count')->default(0);
             $table->string('slug');
             $table->timestamps();
         });

@@ -16,7 +16,6 @@ class CreateTournamentTypesTable extends Migration
         Schema::create('tournament_types', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->integer('max_players');
             $table->timestamps();
         });
     }

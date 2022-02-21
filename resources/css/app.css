@@ -1,3 +1,31 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "./_tailwind.css";
+
+/*@layer components {*/
+/*    .chat {*/
+
+/*    .chat__chat-list {*/
+/*        @apply h[ 525 px ];*/
+
+/*    }*/
+
+/*    .chat__user-list {*/
+/*        @apply h[ 525 px ];*/
+
+/*    }*/
+
+/*    .chat__box {*/
+/*        @apply h[ 782 px ];*/
+
+/*    .chat__box__text-box {*/
+/*        @apply sm:max-w[ 49 % ] max-w[ 90 % ];*/
+/*    }*/
+/*}*/
+
+/*.chat__box__input {*/
+/*    @apply h[ 46 px ];*/
+
+/*}*/
+
+/*}*/
+/*}*/
+

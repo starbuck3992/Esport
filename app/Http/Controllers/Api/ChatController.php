@@ -22,7 +22,7 @@ class ChatController extends Controller
 {
     public function messages($roomId)
     {
-        return MessageResource::collection(Message::where('room_id', $roomId)->orderBy('created_at', 'DESC')->take(5)->get());
+        return MessageResource::collection(Message::where('room_id', $roomId)->orderBy('created_at', 'ASC')->take(5)->get());
     }
 
     public function setOnline(Request $request)

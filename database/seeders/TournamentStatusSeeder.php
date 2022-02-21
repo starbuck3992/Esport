@@ -18,7 +18,10 @@ class TournamentStatusSeeder extends Seeder
     {
         DB::table('tournament_statuses')->insert([
             [
-                'name' => 'Otevřen'
+                'name' => 'Registrace otevřena'
+            ],
+            [
+                'name' => 'Registrace uzavřena'
             ],
             [
                 'name' => 'Probíhá'

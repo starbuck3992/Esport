@@ -10,7 +10,7 @@
                     <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                         <label for="name" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">Název</label>
                         <div class="mt-1 sm:mt-0 sm:col-span-2">
-                            <input v-model="form.name" type="text" name="name" id="name" autocomplete="given-name" class="max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md" required/>
+                            <input v-model="form.name" type="text" name="name" id="name" class="max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md" required/>
                         </div>
                         <div class="mt-1 text-sm text-red-600" id="name-error"
                              v-if="form.errors.has('name')"
@@ -55,12 +55,22 @@
                         <label for="game" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"> Typ turnaje </label>
                         <div class="mt-1 sm:mt-0 sm:col-span-2">
                             <select required v-model="form.tournamentType" id="type" name="type" class="max-w-lg block focus:ring-indigo-500 focus:border-indigo-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md">
-                                <option v-for="tournamentType in tournamentTypes" :key="tournamentType.id" :value="tournamentType.id" @change="console.log(tournamentType.maxPlayers)">{{tournamentType.name}} - {{tournamentType.maxPlayers}} hráčů</option>
+                                <option v-for="tournamentType in tournamentTypes" :key="tournamentType.id" :value="tournamentType.id">{{tournamentType.name}}</option>
                             </select>
                         </div>
                         <div class="mt-1 text-sm text-red-600" id="type-error"
                              v-if="form.errors.has('tournamentType')"
                              v-text="form.errors.get('tournamentType')"></div>
+                    </div>
+
+                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                        <label for="maxPlayers" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">Maximální počet hráčů/týmů</label>
+                        <div class="mt-1 sm:mt-0 sm:col-span-2">
+                            <input v-model="form.maxPlayers" type="number" name="maxPlayers-error" id="maxPlayers" class="max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md" required/>
+                        </div>
+                        <div class="mt-1 text-sm text-red-600" id="maxPlayers-error"
+                             v-if="form.errors.has('maxPlayers')"
+                             v-text="form.errors.get('maxPlayers')"></div>
                     </div>
 
                     <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
@@ -135,7 +145,6 @@ export default {
 
         onMounted(() => {
             Api.get('/api/admin/tournaments/create').then((response) => {
-                console.log(response)
                 platforms.value = response.data.platforms;
                 games.value = response.data.games;
                 tournamentTypes.value = response.data.tournamentTypes;

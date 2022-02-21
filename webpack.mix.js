@@ -25,4 +25,10 @@ mix.js('resources/js/app.js', 'public/js')
     .vue()
     .sass('resources/sass/app.scss', 'public/css')
     .js('resources/js/service-worker.js', 'public')
-    .postCss('resources/css/app.css', 'public/css', [require('tailwindcss')]);
+    .postCss('resources/css/app.css', 'public/css')
+
+mix.options({
+    postCss: [
+        require('tailwindcss')
+    ]
+});

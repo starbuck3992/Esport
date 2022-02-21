@@ -16,7 +16,6 @@ use App\Models\Tournament;
 use App\Models\TournamentType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Throwable;
 
@@ -72,6 +71,7 @@ class TournamentController extends Controller
                 'information' => $request->information,
                 'fee' => $request->fee,
                 'schedule_start' => $request->scheduleStart,
+                'max_players' => $request->maxPlayers,
                 'registration_sequence' => serialize($sequence),
                 'slug' => $slug
             ]);
@@ -99,16 +99,43 @@ class TournamentController extends Controller
 
             $userId = Auth::id();
 
-            //check if user can register
-            $tournament = Tournament::where('slug', $request->slug)->where('tournament_status_id', 1)->whereHas(
-                'tournamentMatches', function ($query) use ($userId) {
-                $query->where('user_guest', '!=', $userId)->orWhere('user_home', '!=', $userId);
-            })->firstorfail();
+            $tournament = Tournament::where('slug', $request->slug)->where('tournament_status_id', 1)->firstorfail();
+
+            $playerExist = $tournament->tournamentMatches()->where('user_home', $userId)->orWhere('user_guest', $userId)->exists();
+
+            if ($playerExist) {
+                return response()->json(['message' => 'Již jsi registrován'], 400);
+            }
+
+            $currentCount = $tournament->registered_count;
+            $registrationSequence = unserialize($tournament->registration_sequence);
+
+            $position = explode('-', $registrationSequence[$currentCount]);
+
+            $bracket_position = $position[0];
+            $player_position = $position[1] === 'a' ? 'user_home' : 'user_guest';
+
+            $tournament->tournamentMatches()->updateOrCreate(
+                ['bracket_position' => (int)$bracket_position],
+                [$player_position => $userId]
+            );
+
+            $currentCount += 1;
+
+            if ($currentCount === $tournament->max_players) {
+                $tournament->tournament_status_id = 2;
+            }
+
+            $tournament->registered_count = $currentCount;
+            $tournament->save();
+
+            return response()->json(['message' => 'Byl jsi registrován do turnaje']);
+
 
         } catch (Throwable $e) {
 
             report($e);
-            return response()->json(['message' => 'Nastala chyba při získávání dat'], 404);
+            return response()->json(['message' => 'Nastala chyba při registraci do turnaje'], 500);
 
         }
 
@@ -118,16 +145,8 @@ class TournamentController extends Controller
     {
         try {
 
-            $tournament = Tournament::with(['platform', 'game', 'tournamentType', 'tournamentStatus', 'currency'])
-                ->where('slug', $slug)->firstOrFail();
-
-            //Count players
-            $player_count = $tournament->tournamentMatches()->select(
-                DB::raw('COUNT(DISTINCT team_guest) + COUNT(DISTINCT team_home) + COUNT(DISTINCT user_guest) + COUNT(DISTINCT user_home) AS SUM'))
-                ->whereBetween('bracket_position', [1, $tournament->tournamentType->max_players / 2])->get()->toArray()[0]['SUM'];
-
-            return (new TournamentShowResource(Tournament::with(['platform', 'game', 'tournamentType', 'tournamentStatus', 'currency'])
-                ->where('slug', $slug)->firstOrFail()))->additional(['registered_count' => $player_count]);
+            return (new TournamentShowResource(Tournament::with(['platform', 'game', 'tournamentType', 'tournamentStatus', 'currency', 'tournamentMatches.userHome','tournamentMatches.userGuest'])
+                ->where('slug', $slug)->firstOrFail()));
 
         } catch (Throwable $e) {
 

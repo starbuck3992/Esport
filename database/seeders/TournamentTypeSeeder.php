@@ -18,16 +18,13 @@ class TournamentTypeSeeder extends Seeder
     {
         DB::table('tournament_types')->insert([
             [
-                'name' => 'Vyřazovací',
-                'max_players' => '8'
+                'name' => 'Vyřazovací'
             ],
             [
-                'name' => 'Vyřazovací',
-                'max_players' => '16'
+                'name' => 'Každý s každým'
             ],
             [
-                'name' => 'Vyřazovací',
-                'max_players' => '32'
+                'name' => 'Švýcarský'
             ],
         ]);
     }

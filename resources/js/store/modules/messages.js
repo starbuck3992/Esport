@@ -38,10 +38,10 @@ const messagesModule = {
     },
     actions: {
         showSuccess({commit}, message) {
-            commit('setSuccess', message);
+            setTimeout(() => commit('setSuccess', message), 250);
         },
         showException({commit}, message) {
-            commit('setException', message);
+            setTimeout(() => commit('setException', message), 250);
         }
     }
 }
