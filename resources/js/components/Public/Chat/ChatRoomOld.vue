@@ -27,7 +27,7 @@
         </div>
         <!-- Typing -->
         <div v-show="room.typing.user">
-            <h1 class="text-black text-gray-900">{{ room.typing.user }} píše</h1>
+            <h1 class="text-gray-900">{{ room.typing.user }} píše</h1>
         </div>
         <!-- Messages -->
         <ChatMessages :messages="room.messages"></ChatMessages>
