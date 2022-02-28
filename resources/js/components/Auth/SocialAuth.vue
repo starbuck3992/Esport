@@ -1,24 +1,24 @@
 <template>
-    <div class="grid-rows-1 gap-3">
+    <div class="grid-rows-1 gap-3 mt-2">
         <div>
             <button v-on:click="socialAuth('google')"
-                    class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                    class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 mb-1">
                 <img class="w-12 h-12" src="/storage/images/social/btn_google_light_normal_ios.svg" alt="google_logo">
-                <span>Pokračovat přes Google</span>
+                <span class="pl-2 my-auto">Pokračovat přes Google</span>
             </button>
         </div>
         <div>
             <button v-on:click="socialAuth('discord')"
-                    class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                    class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 mb-1">
                 <img class="w-12 h-12" src="/storage/images/social/f_logo_RGB-Blue_58.png" alt="discord_logo">
-                <span>Pokračovat přes Discord</span>
+                <span class="pl-2 my-auto">Pokračovat přes Discord</span>
             </button>
         </div>
         <div>
             <button v-on:click="socialAuth('twitch')"
-                    class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                    class="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 mb-1">
                 <img class="w-12 h-12" src="/storage/images/social/TwitchExtrudedWordmarkPurple.svg" alt="twitch_logo">
-                <span>Pokračovat přes Twitch</span>
+                <span class="pl-2 my-auto">Pokračovat přes Twitch</span>
             </button>
         </div>
     </div>

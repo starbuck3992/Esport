@@ -14,7 +14,7 @@
         <div>{{ tournament.registeredCount }}</div>
 
         <div>Zaregistrovaní hráči</div>
-        <div v-for="tournamentMatch in tournament.tournamentMatches">
+        <div v-for="tournamentMatch in tournament.tournamentMatches" :key="tournamentMatch.id">
             <div v-if="tournamentMatch.userHome">
             <div>{{tournamentMatch.userHome.nick}}</div>
             <div>{{tournamentMatch.userHome.avatar}}</div>

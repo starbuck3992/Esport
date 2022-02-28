@@ -1,10 +1,11 @@
 <template>
-    <form @submit.prevent="submit" class="space-y-8 divide-y divide-gray-200">
-        <div class="space-y-8 divide-y divide-gray-200 sm:space-y-5">
-            <div class="pt-8 space-y-6 sm:pt-10 sm:space-y-5">
-                <div>
-                    <h3 class="text-lg leading-6 font-medium text-gray-900">Turnaj</h3>
-                    <p class="mt-1 max-w-2xl text-sm text-gray-500">Zde vytvoříte turnaj</p>
+<div class="bg-[#f3f4f6] p-5">
+    <form @submit.prevent="submit" class="space-y-8 divide-y divide-gray-200 max-w-3xl mx-auto p-4 bg-white shadow-md border rounded mt-10">
+        <div class="space-y-5 divide-y divide-gray-200 sm:space-y-5">
+            <div class="pt-5 space-y-6 sm:space-y-5">
+                <div class="mx-auto w-full bg-[#18212f] p-5 rounded -mt-20">
+                    <h3 class="text-6xl leading-6 font-medium text-white mx-auto w-full text-center">Turnaj</h3>
+                    <h4 class="mt-10 text-sm text-white mx-auto w-full text-center">Zde vytvoříte turnaj</h4>
                 </div>
                 <div class="space-y-6 sm:space-y-5">
                     <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
@@ -113,6 +114,7 @@
             </div>
         </div>
     </form>
+</div>
 </template>
 
 <script>

@@ -8,7 +8,7 @@
                            <label for="user" class="block text-sm font-medium text-gray-700">Název uživatele</label>
                             <div class="mt-1 relative">
                                 <input type="text" name="user" id="user" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" placeholder="Jméno uživatale" />
-                                <div v-show="true" class="fixed z-30 top-30 left-4 w-auto bg-white px-10 mt-2 max-h-[55vh] overflow-y-scroll overflow-x-hidden">
+                                <div v-show="false" class="fixed z-30 top-30 left-4 w-auto bg-white px-10 mt-2 max-h-[55vh] overflow-y-scroll overflow-x-hidden">
                                     <ul role="list" class="divide-y divide-gray-200">
                                         <li v-for="person in people" :key="person.email" class="py-4 flex">
                                         <img class="h-10 w-10 rounded-full" :src="person.image" alt="" />
