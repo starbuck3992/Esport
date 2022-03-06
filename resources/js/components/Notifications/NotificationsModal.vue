@@ -21,7 +21,7 @@
                                 </DialogTitle>
                                 <div v-if="notificationsCount !== 0" class="mt-2">
                                     <button v-on:click="markAllAsRead">Označit vše jako přečtené</button>
-                                    <ul role="list" class="py-4 space-y-2 sm:px-6 sm:space-y-4 lg:px-8">
+                                   <!-- <ul role="list" class="py-4 space-y-2 sm:px-6 sm:space-y-4 lg:px-8">
                                         <li v-for="(notification, index) in notifications" :key="notification.id" v-on:click="markAsRead(index, notification.roomId)">
                                             <img class="h-16 w-16 rounded-full"
                                                  :src="notification.image"
@@ -30,6 +30,16 @@
                                                 {{ localizeDateTime(notification.timestamp) }}
                                             </time>
                                             <div class="mt-4 space-y-6 text-sm text-gray-800" v-html="notification.text"/>
+                                        </li>
+                                    </ul> -->
+                                    <ul role="list" class="divide-y divide-gray-200 cursor-pointer">
+                                        <li v-for="(notification, index) in notifications" :key="notification.id" v-on:click="markAsRead(index, notification.roomId)" class="py-4 flex">
+                                        <img class="h-10 w-10 rounded-full" :src="notification.image" alt="notification_avatar"/>
+                                        <div class="ml-3">
+                                            <p class="text-sm font-medium text-gray-900" v-html="notification.text"></p>
+                                            <p class="text-sm text-gray-500">{{ localizeDateTime(notification.timestamp) }}</p>
+
+                                        </div>
                                         </li>
                                     </ul>
                                 </div>

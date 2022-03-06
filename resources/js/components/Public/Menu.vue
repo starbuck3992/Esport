@@ -112,17 +112,21 @@
                 <!-- Top navigation -->
                 <div class="bg-gray-900">
                     <div class="max-w-7xl mx-auto h-10 px-4 flex items-center justify-end sm:px-6 lg:px-8">
-                        <router-link class="text-white" :to="{ name: 'tournamentShow' , params: {slug: 'eeeew' }}">Turnaj X</router-link>
-                        <router-link class="text-white" :to="{ name: 'tournamentCreate' }">Turnaj</router-link>
-                        <div v-if="loggedIn" class="flex items-center space-x-6">
-                            <div class="text-white">Přihlášen uživatel : <span>{{ user.nick }}</span></div>
-                            <a href="#" class="text-sm font-medium text-white hover:text-gray-100" @click="openChat">Chat</a>
-                            <a href="#" class="text-sm font-medium text-white hover:text-gray-100" @click="openNotifications">Notifikace</a>
-                            <div class="text-sm font-medium text-white hover:text-gray-100">Počet notifikací: {{notificationsCount}}</div>
-                        </div>
-                        <div v-else class="flex items-center space-x-6">
-                            <a href="#" class="text-sm font-medium text-white hover:text-gray-100" @click="openLogin">Přihlásit se</a>
-                            <a href="#" class="text-sm font-medium text-white hover:text-gray-100" @click="openRegister">Vytvořit účet</a>
+                        <div class="flex items-center space-x-6">
+                            <router-link class="text-sm text-white hover:text-gray-100 text-center m-auto h-6 w-auto" :to="{ name: 'tournamentShow' , params: {slug: 'eeeew' }}">Turnaj X</router-link>
+                            <router-link class="text-sm text-white hover:text-gray-100 text-center m-auto h-6 w-auto mr-1" :to="{ name: 'tournamentCreate' }">Turnaj</router-link>
+                            <div v-if="loggedIn" class="">
+                                <a href="#" class="text-sm text-white hover:text-gray-100 text-center m-auto h-6 w-auto mr-4">Přihlášen uživatel: <span class="font-semibold">{{ user.nick }}</span></a>
+                                <a href="#" class="text-sm font-medium text-white hover:text-gray-100 text-center m-auto h-6 w-auto" @click="openChat">Chat</a>
+                                <a href="#" class="text-sm font-medium text-white hover:text-gray-100 inline-flex text-center h-6 w-auto" @click="openNotifications">Notifikace
+                                    <div><small class="text-xs bg-red-500 text-white rounded-full h-6 w-6 leading-6 text-center m-auto inline-flex ml-2 justify-center">{{notificationsCount}}</small></div>
+                                </a>
+                            <!-- <div class="text-sm font-medium text-white hover:text-gray-100">Počet notifikací: {{notificationsCount}}</div> -->
+                            </div>
+                            <div v-else class="">
+                                <a href="#" class="text-sm font-medium text-white hover:text-gray-100" @click="openLogin">Přihlásit se</a>
+                                <a href="#" class="text-sm font-medium text-white hover:text-gray-100" @click="openRegister">Vytvořit účet</a>
+                            </div>
                         </div>
                     </div>
                 </div>
