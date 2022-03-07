@@ -45925,40 +45925,63 @@ var _hoisted_4 = {
   key: 1
 };
 var _hoisted_5 = {
-  "class": "space-y-6 sm:space-y-5 grid grid-cols-3"
+  "class": "grid grid-cols-3"
 };
 var _hoisted_6 = {
-  "class": "sm:grid sm:grid-cols-3 sm:gap-4 sm:items-end col-span-1 m-auto"
+  "class": "sm:grid sm:grid-cols-2 col-span-1"
 };
 var _hoisted_7 = {
-  "for": "name",
-  "class": "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
-};
-var _hoisted_8 = {
-  "class": "mt-1 sm:mt-0 sm:col-span-2"
+  "class": "col-span-1 m-auto"
 };
 
-var _hoisted_9 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-  "class": "col-span-1 m-auto"
-}, " VS ", -1
+var _hoisted_8 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  "class": "relative flex"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  "class": "w-2 h-36 bg-[#107df8] col-span-1 skew-x-30 overflow-hidden mr-1 inline-flex"
+}), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  "class": "w-28 h-36 bg-[#107df8] col-span-1 skew-x-30 overflow-hidden inline-flex"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
+  "class": "z-5 -skew-x-20 absolute w-96 h-44 -top-3 scale-150",
+  src: "https://odindesignthemes.com/pixel-diamond/img/teams/logos/01.png"
+})])], -1
 /* HOISTED */
 );
 
-var _hoisted_10 = {
-  "class": "sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start col-span-1 m-auto"
+var _hoisted_9 = {
+  "class": "col-span-1 m-auto flex px-6"
 };
+
+var _hoisted_10 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
+  "class": "px-5 my-auto font-extrabold"
+}, "-", -1
+/* HOISTED */
+);
+
 var _hoisted_11 = {
-  "for": "name",
-  "class": "block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
+  "class": "sm:grid sm:grid-cols-2 col-span-1"
 };
-var _hoisted_12 = {
-  "class": "mt-1 sm:mt-0 sm:col-span-2"
-};
+
+var _hoisted_12 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  "class": "relative flex"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  "class": "w-2 h-36 bg-orange-600 col-span-1 -skew-x-30 overflow-hidden mr-1 inline-flex ml-5"
+}), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  "class": "w-28 h-36 bg-orange-600 col-span-1 -skew-x-30 overflow-hidden inline-flex"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
+  "class": "z-5 skew-x-20 absolute w-96 h-44 -top-3 scale-150",
+  src: "https://odindesignthemes.com/pixel-diamond/img/teams/logos/01.png"
+})])], -1
+/* HOISTED */
+);
+
 var _hoisted_13 = {
-  "class": "mt-5"
+  "class": "col-span-1 m-auto"
 };
 var _hoisted_14 = {
-  "class": "flex justify-end"
+  "class": "mt-10"
+};
+var _hoisted_15 = {
+  "class": "flex justify-center"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.tournament.name), 1
@@ -46022,34 +46045,34 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     onSubmit: _cache[4] || (_cache[4] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function () {
       return $setup.saveScore && $setup.saveScore.apply($setup, arguments);
     }, ["prevent"])),
-    "class": "space-y-8 mt-2 max-w-3xl m-auto"
-  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", _hoisted_7, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.currentMatch.name), 1
+    "class": "mt-2 max-w-4xl m-auto"
+  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.currentMatch.name), 1
   /* TEXT */
-  ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+  )]), _hoisted_8, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <label for=\"name\" class=\"text-sm font-medium text-gray-700 sm:mt-px sm:pt-2 inline-block text-center\">{{currentMatch.name}}</label> ")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     "onUpdate:modelValue": _cache[1] || (_cache[1] = function ($event) {
       return $setup.form.scoreHome = $event;
     }),
     type: "text",
     name: "name",
     id: "name",
-    "class": "max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md",
+    "class": "max-w-lg w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md inline-flex text-center",
     required: ""
   }, null, 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.form.scoreHome]])])]), _hoisted_9, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", _hoisted_11, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.currentMatch.surname), 1
-  /* TEXT */
-  ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.form.scoreHome]]), _hoisted_10, (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     "onUpdate:modelValue": _cache[2] || (_cache[2] = function ($event) {
       return $setup.form.scoreGuest = $event;
     }),
     type: "text",
     name: "name",
     id: "surname",
-    "class": "max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md",
+    "class": "max-w-lg w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md inline-flex text-center",
     required: ""
   }, null, 512
   /* NEED_PATCH */
-  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.form.scoreGuest]])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_13, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_14, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  ), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $setup.form.scoreGuest]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [_hoisted_12, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_13, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.currentMatch.surname), 1
+  /* TEXT */
+  )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <label for=\"name\" class=\"text-sm font-medium text-gray-700 sm:mt-px sm:pt-2 inline-block text-center\">{{currentMatch.surname}}</label> ")])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_14, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_15, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     onClick: _cache[3] || (_cache[3] = function () {
       return $setup.register && $setup.register.apply($setup, arguments);
     }),

@@ -37,28 +37,42 @@
             Registruj se do turnaje
         </button>
 
-        <form @submit.prevent="saveScore" class="space-y-8 mt-2 max-w-3xl m-auto">
-                <div class="space-y-6 sm:space-y-5 grid grid-cols-3">
-                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-end col-span-1 m-auto">
-                        <label for="name" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">{{currentMatch.name}}</label>
-                        <div class="mt-1 sm:mt-0 sm:col-span-2">
-                            <input v-model="form.scoreHome" type="text" name="name" id="name" class="max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md" required/>
+        <form @submit.prevent="saveScore" class="mt-2 max-w-4xl m-auto">
+                <div class="grid grid-cols-3">
+                    <div class="sm:grid sm:grid-cols-2 col-span-1">
+                        <div class="col-span-1 m-auto">
+                            <p>{{currentMatch.name}}</p>
                         </div>
+                        <div class="relative flex">
+                            <div class="w-2 h-36 bg-[#107df8] col-span-1 skew-x-30 overflow-hidden mr-1 inline-flex"></div>
+                            <div class="w-28 h-36 bg-[#107df8] col-span-1 skew-x-30 overflow-hidden inline-flex">
+                                <img class="z-5 -skew-x-20 absolute w-96 h-44 -top-3 scale-150" src="https://odindesignthemes.com/pixel-diamond/img/teams/logos/01.png">
+                            </div>
+                        </div>
+                        <!-- <label for="name" class="text-sm font-medium text-gray-700 sm:mt-px sm:pt-2 inline-block text-center">{{currentMatch.name}}</label> -->
                     </div>
 
-                    <div class="col-span-1 m-auto">
-                        VS
+                    <div class="col-span-1 m-auto flex px-6">
+                        <input v-model="form.scoreHome" type="text" name="name" id="name" class="max-w-lg w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md inline-flex text-center" required/>
+                        <span class="px-5 my-auto font-extrabold">-</span>
+                        <input v-model="form.scoreGuest" type="text" name="name" id="surname" class="max-w-lg w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md inline-flex text-center" required/>
                     </div>
 
-                    <div class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start col-span-1 m-auto">
-                        <label for="name" class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">{{currentMatch.surname}}</label>
-                        <div class="mt-1 sm:mt-0 sm:col-span-2">
-                            <input v-model="form.scoreGuest" type="text" name="name" id="surname" class="max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md" required/>
+                    <div class="sm:grid sm:grid-cols-2 col-span-1">
+                        <div class="relative flex">
+                            <div class="w-2 h-36 bg-orange-600 col-span-1 -skew-x-30 overflow-hidden mr-1 inline-flex ml-5"></div>
+                            <div class="w-28 h-36 bg-orange-600 col-span-1 -skew-x-30 overflow-hidden inline-flex">
+                                <img class="z-5 skew-x-20 absolute w-96 h-44 -top-3 scale-150" src="https://odindesignthemes.com/pixel-diamond/img/teams/logos/01.png">
+                            </div>
                         </div>
+                        <div class="col-span-1 m-auto">
+                            <p>{{currentMatch.surname}}</p>
+                        </div>
+                       <!-- <label for="name" class="text-sm font-medium text-gray-700 sm:mt-px sm:pt-2 inline-block text-center">{{currentMatch.surname}}</label> -->
                     </div>
                 </div>
-                <div class="mt-5">
-                    <div class="flex justify-end">
+                <div class="mt-10">
+                    <div class="flex justify-center">
                         <button @click="register" type="submit" class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Zapiš výsledek</button>
                     </div>
                 </div>
