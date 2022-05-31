@@ -8,10 +8,14 @@ const user = {
             nick: null,
             avatar: null
         },
+        language: 'cs'
     },
     getters: {
         user(state) {
             return state.user;
+        },
+        language(state) {
+            return state.language;
         },
         loggedIn(state) {
             return !!state.user.id;
@@ -43,7 +47,6 @@ const user = {
             })
         },
         async socialAuth({}, provider) {
-            console.log(provider)
             await Api.get('/sanctum/csrf-cookie');
             return new Promise((resolve, reject) => {
                 Api.get(`/api/authorize/${provider}/redirect`).then((response) => {

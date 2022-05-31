@@ -54,12 +54,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function rooms()
     {
-        return $this->belongsToMany(Room::class);
-    }
-
-    public function avatar()
-    {
-        return $this->belongsTo(Image::class, 'image_id', 'id');
+        return $this->belongsToMany(Room::class)->withPivot('online');
     }
 
     public function receivesBroadcastNotificationsOn()
@@ -67,4 +62,9 @@ class User extends Authenticatable implements MustVerifyEmail
         return 'user.'.$this->id;
     }
 
+    public function canJoinRoom($roomId){
+
+        return $this->rooms()->where('rooms.id',$roomId)->exists();
+
+    }
 }

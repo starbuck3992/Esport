@@ -163,8 +163,8 @@ export default {
                     if (error.response.status === 422) {
                         form.onFail(error.response.data.errors);
                     } else {
+                        await store.dispatch('messagesModule/showException', error.response.data.message);
                         close();
-                        setTimeout(() => store.dispatch('messagesModule/showException', error.response.data.message), 250)
                     }
                 } else {
                     console.log(error);

@@ -20,7 +20,10 @@ class DatabaseSeeder extends Seeder
             GameSeeder::class,
             TournamentTypeSeeder::class,
             TournamentStatusSeeder::class,
-            CurrencySeeder::class
+            CurrencySeeder::class,
+            RoomSeeder::class,
+            RoomUserSeeder::class,
+            MessageSeeder::class
         ]);
     }
 }

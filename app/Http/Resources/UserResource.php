@@ -25,7 +25,7 @@ class UserResource extends JsonResource
                 'playstationProfile' => $this->playstation_profile,
                 'xboxProfile' => $this->xbox_profile,
             ],
-            'avatar' => Storage::url($this->avatar->path),
+            'avatar' => Storage::url($this->avatar),
             'providers' => ProviderResource::collection($this->whenLoaded('providers'))
         ];
     }

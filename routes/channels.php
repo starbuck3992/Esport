@@ -18,6 +18,12 @@ Broadcast::channel('user.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });
 
+//Broadcast::channel('chat.{roomId}', function ($user, $roomId) {
+//    return $user->rooms()->where('rooms.id',$roomId)->exists();
+//});
+
 Broadcast::channel('chat.{roomId}', function ($user, $roomId) {
-    return $user->rooms()->where('rooms.id',$roomId)->exists();
+    if ($user->canJoinRoom($roomId)) {
+        return ['id' => $user->id];
+    }
 });

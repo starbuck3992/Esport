@@ -16,7 +16,6 @@ class RoomsTable extends Migration
         Schema::create('rooms', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name')->nullable();
-            $table->boolean('active');
             $table->timestamps();
         });
     }

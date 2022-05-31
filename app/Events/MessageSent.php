@@ -2,13 +2,11 @@
 
 namespace App\Events;
 
-use App\Http\Resources\Chat\MessageResource;
-use App\Http\Resources\UserResource;
+use App\Http\Resources\Chat\MessageOthersResource;
 use App\Models\User;
 use App\Models\Message;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -49,10 +47,11 @@ class MessageSent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('chat.'. $this->message->room_id);
+        return new PresenceChannel('chat.' . $this->message->room_id);
     }
 
-    public function broadcastWith(){
-        return (new MessageResource(($this->message)))->resolve();
+    public function broadcastWith()
+    {
+        return (new MessageOthersResource(($this->message)))->resolve();
     }
 }

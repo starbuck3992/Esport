@@ -11,6 +11,8 @@ use App\Http\Resources\UserResource;
 use App\Models\Message;
 use App\Models\Room;
 use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -22,7 +24,7 @@ class ChatController extends Controller
 {
     public function messages($roomId)
     {
-        return MessageResource::collection(Message::where('room_id', $roomId)->orderBy('created_at', 'ASC')->take(5)->get());
+        return MessageResource::collection(Message::where('room_id', $roomId)->orderBy('created_at', 'desc')->take(10)->get()->reverse());
     }
 
     public function setOnline(Request $request)
@@ -31,7 +33,13 @@ class ChatController extends Controller
 
             $user = User::find(Auth::id());
 
-            $user->rooms()->where('online',true)->updateExistingPivot($request->id, [
+            Room::find($request->id)->unreadMessages()->update(
+                [
+                    'read' => true,
+                    'read_at' => Carbon::now()
+                ]);
+
+            $user->rooms()->where('online', true)->update([
                 'online' => false,
             ]);
 
@@ -52,43 +60,48 @@ class ChatController extends Controller
 
         $user = User::find(Auth::id());
 
-        return RoomResource::collection($user->rooms()->where('active', 1)->with(['messages' => function ($query) {
+        return RoomResource::collection($user->rooms()->with(['latestMessage', 'users' => function ($query) use ($user) {
+            $query->where('users.id','!=', Auth::id());
+        }])->withCount(['unreadMessages' => function ($query) use ($user) {
+            $query->where('read', false)->where('message_user.user_id',$user->id);
+        },'messages'])->orderBy('unread_messages_count', 'desc')->orderBy('messages_count', 'desc')->paginate(5));
 
-            $query->orderBy('created_at', 'DESC')->take(5);
-
-        }, 'users.avatar', 'users' => function ($query) {
-
-            $query->where('users.id', '!=', Auth::id());
-
-        }
-        ])->orderBy('name', 'DESC')->get());
+//        return $user->rooms()->with(['latestMessage', 'users'])->withCount(['unreadMessages' => function ($query) use ($user) {
+//            $query->where('read', false)->where('message_user.user_id',$user->id);
+//        },'messages'])->orderBy('unread_messages_count', 'desc')->orderBy('messages_count', 'desc')->paginate(5);
     }
+
 
     public function sendMessage(Request $request)
     {
         $user = User::find(Auth::id());
+        $roomId = $request->id;
 
+        //Check if user can type in the room
         try {
 
-            $room = $user->rooms()->where('active', 1)->where('rooms.id', $request->id)->firstOrFail();
+            $room = $user->rooms()->where('rooms.id', $roomId)->firstOrFail();
 
         } catch (Throwable $e) {
 
             report($e);
-            return response()->json(['message' => 'Místnost nenalezena'], 404);
+            return response()->json(['message' => 'Nemáte oprávnění psát do místnosti'], 404);
 
         }
-
-        DB::beginTransaction();
 
         try {
 
             $message = $user->messages()->create([
-                'room_id' => $request->id,
+                'room_id' => $roomId,
                 'message' => $request->message
             ]);
 
-            $message->load('user', 'user.avatar');
+            //Get message recipients
+            $usersToNotify = $room->users()->where('users.id', '!=', $user->id)->get();
+
+            foreach ($usersToNotify as $userToNotify){
+                $message->messageRecipients()->attach($userToNotify->id, ['read' => $userToNotify->pivot->online]);
+            }
 
         } catch (Throwable $e) {
 
@@ -101,20 +114,15 @@ class ChatController extends Controller
 
             broadcast(new MessageSentEvent($message))->toOthers();
 
-            $usersToNotify = $room->users()->where('users.id', '=', $user->id)->get();
-
-            Notification::send($usersToNotify, new MessageSentNotification($message));
+            //Notification::send($usersToNotify, new MessageSentNotification($message));
 
         } catch (Throwable $e) {
 
-            DB::rollback();
 
             report($e);
             return response()->json(['message' => 'Došlo k chybě při odesílání notifikace'], 500);
 
         }
-
-        DB::commit();
 
         return response()->json(['message' => 'Zpráva odeslána']);
 

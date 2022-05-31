@@ -40,6 +40,20 @@ class UserController extends Controller
 
             $user = User::find(Auth::id());
 
+            if ($request->file('avatar')) {
+
+                $currentAvatar = $user->avatar;
+                if ($currentAvatar !== 'images/avatars/default/user.png') {
+                    Storage::delete($currentAvatar);
+                }
+
+                $avatar_file = $request->file('avatar');
+                $path = $avatar_file->store("images/avatars/$user->id", 'public');
+
+                $user->avatar = $path;
+
+            }
+
             $user->nick = $request->nick;
             $user->about = $request->about;
             $user->name = $request->name;
@@ -55,37 +69,6 @@ class UserController extends Controller
             report($e);
 
             return response()->json(['message' => 'Nastala chyba při ukládání změn'], 500);
-
-        }
-
-        if ($request->file('avatar')) {
-
-            try {
-
-                $avatar = $user->avatar()->firstorfail();
-
-                if($avatar->id !== 1){
-                    Storage::delete($avatar->path);
-                }
-
-                $avatar_file = $request->file('avatar');
-                $path = $avatar_file->store("images/avatars/$user->id", 'public');
-
-                $avatar->path = $path;
-                $avatar->original_name = $avatar_file->getClientOriginalName();
-                $avatar->extension = $avatar_file->extension();
-                $avatar->size = $avatar_file->getSize();
-                $avatar->save();
-
-            } catch (Throwable $e) {
-
-                DB::rollback();
-
-                report($e);
-
-                return response()->json(['message' => 'Chyba při ukládání profilového obrázku'], 500);
-
-            }
 
         }
 

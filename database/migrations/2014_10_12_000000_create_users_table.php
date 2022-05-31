@@ -15,11 +15,11 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('image_id')->default(1)->constrained();
             $table->string('nick')->unique();
             $table->string('name')->nullable();
             $table->string('surname')->nullable();
             $table->longText('about')->nullable();
+            $table->string('avatar')->default('images/avatars/default/user.png');
             $table->string('playstation_profile')->nullable();
             $table->string('xbox_profile')->nullable();
             $table->string('email')->unique();
@@ -38,10 +38,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropForeign(['image_id']);
-        });
-
         Schema::dropIfExists('users');
     }
 }

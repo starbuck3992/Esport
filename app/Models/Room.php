@@ -18,12 +18,22 @@ class Room extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class)->withPivot('online');
     }
 
     public function messages()
     {
         return $this->hasMany(Message::class);
+    }
+
+    public function unreadMessages()
+    {
+        return $this->hasManyThrough(MessageUser::class, Message::class);
+    }
+
+    public function latestMessage()
+    {
+        return $this->hasOne(Message::class)->latest();
     }
 
 }

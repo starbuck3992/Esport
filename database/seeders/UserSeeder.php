@@ -18,37 +18,44 @@ class UserSeeder extends Seeder
     {
         DB::table('users')->insert([
             [
-                'image_id' => 1,
+                'avatar' => 'images/avatars/default/user.png',
                 'nick' => 'user1',
                 'email' => 'user1@esportujeme.cz',
                 'password' => Hash::make('esportujeme'),
                 'is_admin' => true
             ],
             [
-                'image_id' => 1,
+                'avatar' => 'images/avatars/default/user.png',
                 'nick' => 'user2',
                 'email' => 'user2@esportujeme.cz',
                 'password' => Hash::make('esportujeme'),
                 'is_admin' => false
             ],
             [
-                'image_id' => 1,
+                'avatar' => 'images/avatars/default/user.png',
                 'nick' => 'user3',
                 'email' => 'user3@esportujeme.cz',
                 'password' => Hash::make('esportujeme'),
                 'is_admin' => false
             ],
             [
-                'image_id' => 1,
+                'avatar' => 'images/avatars/default/user.png',
                 'nick' => 'user4',
                 'email' => 'user4@esportujeme.cz',
                 'password' => Hash::make('esportujeme'),
                 'is_admin' => false
             ],
             [
-                'image_id' => 1,
+                'avatar' => 'images/avatars/default/user.png',
                 'nick' => 'user5',
                 'email' => 'user5@esportujeme.cz',
+                'password' => Hash::make('esportujeme'),
+                'is_admin' => false
+            ],
+            [
+                'avatar' => 'images/avatars/default/user.png',
+                'nick' => 'user6',
+                'email' => 'user6@esportujeme.cz',
                 'password' => Hash::make('esportujeme'),
                 'is_admin' => false
             ],
